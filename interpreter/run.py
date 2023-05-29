@@ -82,12 +82,85 @@ def _sub():
         subleq(RZ, RZ, _start)
     
 def _sll(rd, rs1, rs2, line):
-    pass  
+    """ sll rd,rs1,rs2
+
+    Initial state:
+        T1: (rs1)
+        T2: (rs2)
+    Pseudocode:
+        T0 <= 0
+        T0 <= T0 - (0 - T1)
+        L0:
+            if T2 <= 0, goto L1.
+            T2 <= T2 - 1
+            T0 <= T0 - (0 - T0)
+            goto L0
+        L1:
+    Final state:
+        T0: (rs1) << (rs2)
+
+    Returns:
+        list: target instruction sequence
+    """
+    _start = int(0x00000040) | PRC_MASK
+    return [] + \
+        subleq(T0, T0, _start +  1 * WORD_WIDTH) + \
+        subleq(RZ, RZ, _start +  2 * WORD_WIDTH) + \
+        subleq(RZ, T1, _start +  3 * WORD_WIDTH) + \
+        subleq(T0, RZ, _start +  4 * WORD_WIDTH) + \
+        subleq(RZ, RZ, _start +  5 * WORD_WIDTH) + \
+        subleq(T2, RZ, _start + 10 * WORD_WIDTH) + \
+        subleq(T2, C1, _start +  7 * WORD_WIDTH) + \
+        subleq(RZ, T0, _start +  8 * WORD_WIDTH) + \
+        subleq(T0, RZ, _start +  9 * WORD_WIDTH) + \
+        subleq(RZ, RZ, _start +  6 * WORD_WIDTH) + \
+        subleq(RZ, RZ, _start)                   + \
+        subleq(RZ, RZ, _start)                   + \
+        subleq(RZ, RZ, _start)                   + \
+        subleq(RZ, RZ, _start)                   + \
+        subleq(RZ, RZ, _start)                   + \
+        subleq(RZ, RZ, _start)
     
-def _srl(rd, rs1, rs2, line):
+def _srl():
+    """ srl rd,rs1,rs2
+
+    Initial state:
+        T1: (rs1)
+        T2: (rs2)
+    Pseudocode:
+        T0 <= 0
+        T0 <= T0 - (0 - T1)
+        L0:
+            if T2 <= 0, goto L1.
+            
+        L1:
+    Final state:
+        T0: (rs1) >> (rs2)
+
+    Returns:
+        list: target instruction sequence
+    """
     pass
     
-def _sra(rd, rs1, rs2, line):
+def _sra():
+    """ sra rd,rs1,rs2
+
+    Initial state:
+        T1: (rs1)
+        T2: (rs2)
+    Pseudocode:
+        T0 <= 0
+        T0 <= T0 - (0 - T1)
+        L0:
+            if T2 <= 0, goto L1.
+            
+        L1:
+    Final state:
+        T0: (rs1) >>> (rs2)
+
+    Returns:
+        list: target instruction sequence
+    """
     pass
 
 def _xor(rd, rs1, rs2, line):
