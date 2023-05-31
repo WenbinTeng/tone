@@ -123,42 +123,41 @@ def _and(rd, rs1, rs2, line):
         # while T5 > 0: (assuming mask = T5)
         subleq(RZ, RZ, _start + 10 * INST_WIDTH),
         subleq(T5, RZ, _start + 31 * INST_WIDTH),
-            # T3 = T1
-            subleq(T3, T3, _start + 12 * INST_WIDTH),
-            subleq(RZ, T1, _start + 13 * INST_WIDTH),
-            subleq(T3, RZ, _start + 14 * INST_WIDTH),
-            # T4 = T2
-            subleq(RZ, RZ, _start + 15 * INST_WIDTH),
-            subleq(T4, T4, _start + 16 * INST_WIDTH),
-            subleq(RZ, T2, _start + 17 * INST_WIDTH),
-            subleq(T4, RZ, _start + 18 * INST_WIDTH),
-            
-            # if T3 < mask, goto L0.
-            subleq(T3, T6, _start + 25 * INST_WIDTH),
-            # T1 = T1 - mask
-            subleq(T1, T5, _start + 20 * INST_WIDTH),
-            # if T4 < mask, goto L1.
-            subleq(T4, T6, _start + 26 * INST_WIDTH),
-            # T2 = T2 - T5
-            subleq(T2, T5, _start + 22 * INST_WIDTH),
-            # T0 = T0 + mask
-            subleq(RZ, RZ, _start + 23 * INST_WIDTH),
-            subleq(RZ, T5, _start + 24 * INST_WIDTH),
-            subleq(T0, RZ, _start + 25 * INST_WIDTH),
-            # goto L1.
-            subleq(RZ, RZ, _start + 28 * INST_WIDTH),
-        # L0:
-            # if T4 < mask, goto L1.
-            subleq(T4, T6, _start + 28 * INST_WIDTH),
-            # T2 = T2 - T5
-            subleq(T2, T5, _start + 28 * INST_WIDTH),
-        # L1:
-            # mask = mask >> 1
-            subleq(_start + 3 * INST_WIDTH + WORD_WIDTH, CONST_POW[2],  _start + 28 * INST_WIDTH),
-            subleq(_start + 7 * INST_WIDTH + WORD_WIDTH, CONST_POW[2],  _start + 29 * INST_WIDTH),
-            subleq(RZ, RZ, _start + 9 * INST_WIDTH),
-            subleq(RZ, RZ, _start + 31 * INST_WIDTH),
-        # EXIT:
+        # T3 = T1
+        subleq(T3, T3, _start + 12 * INST_WIDTH),
+        subleq(RZ, T1, _start + 13 * INST_WIDTH),
+        subleq(T3, RZ, _start + 14 * INST_WIDTH),
+        # T4 = T2
+        subleq(RZ, RZ, _start + 15 * INST_WIDTH),
+        subleq(T4, T4, _start + 16 * INST_WIDTH),
+        subleq(RZ, T2, _start + 17 * INST_WIDTH),
+        subleq(T4, RZ, _start + 18 * INST_WIDTH),
+        # if T3 < mask, goto L0.
+        subleq(T3, T6, _start + 25 * INST_WIDTH),
+        # T1 = T1 - mask
+        subleq(T1, T5, _start + 20 * INST_WIDTH),
+        # if T4 < mask, goto L1.
+        subleq(T4, T6, _start + 26 * INST_WIDTH),
+        # T2 = T2 - T5
+        subleq(T2, T5, _start + 22 * INST_WIDTH),
+        # T0 = T0 + mask
+        subleq(RZ, RZ, _start + 23 * INST_WIDTH),
+        subleq(RZ, T5, _start + 24 * INST_WIDTH),
+        subleq(T0, RZ, _start + 25 * INST_WIDTH),
+        # goto L1.
+        subleq(RZ, RZ, _start + 28 * INST_WIDTH),
+    # L0:
+        # if T4 < mask, goto L1.
+        subleq(T4, T6, _start + 28 * INST_WIDTH),
+        # T2 = T2 - T5
+        subleq(T2, T5, _start + 28 * INST_WIDTH),
+    # L1:
+        # mask = mask >> 1
+        subleq(_start + 3 * INST_WIDTH + WORD_WIDTH, CONST_POW[2],  _start + 28 * INST_WIDTH),
+        subleq(_start + 7 * INST_WIDTH + WORD_WIDTH, CONST_POW[2],  _start + 29 * INST_WIDTH),
+        subleq(RZ, RZ, _start + 9 * INST_WIDTH),
+        subleq(RZ, RZ, _start + 31 * INST_WIDTH),
+    # EXIT:
         subleq(RZ, RZ, _start)
     ]
 
@@ -207,42 +206,42 @@ def _or(rd, rs1, rs2, line):
         # while T5 > 0: (assuming mask = T5)
         subleq(RZ, RZ, _start + 10 * INST_WIDTH),
         subleq(T5, RZ, _start + 31 * INST_WIDTH),
-            # T3 = T1
-            subleq(T3, T3, _start + 12 * INST_WIDTH),
-            subleq(RZ, T1, _start + 13 * INST_WIDTH),
-            subleq(T3, RZ, _start + 14 * INST_WIDTH),
-            # T4 = T2
-            subleq(RZ, RZ, _start + 15 * INST_WIDTH),
-            subleq(T4, T4, _start + 16 * INST_WIDTH),
-            subleq(RZ, T2, _start + 17 * INST_WIDTH),
-            subleq(T4, RZ, _start + 18 * INST_WIDTH),
-            
-            # if T3 < mask, goto L0.
-            subleq(T3, T6, _start + 23 * INST_WIDTH),
-            # T1 = T1 - mask
-            subleq(T1, T5, _start + 20 * INST_WIDTH),
-            # if T4 < mask, L1.
-            subleq(T4, T6, _start + 25 * INST_WIDTH),
-            # T2 = T2 - mask
-            subleq(T2, T5, _start + 22 * INST_WIDTH),
-            # goto L1.
-            subleq(RZ, RZ, _start + 25 * INST_WIDTH),
-        # L0:
-            # if T4 < mask, goto L2.
-            subleq(T4, T6, _start + 28 * INST_WIDTH),
-            # T2 = T2 - mask
-            subleq(T2, T5, _start + 25 * INST_WIDTH),
-        # L1:
-            # T0 = T0 + mask
-            subleq(RZ, RZ, _start + 26 * INST_WIDTH),
-            subleq(RZ, T5, _start + 27 * INST_WIDTH),
-            subleq(T0, RZ, _start + 28 * INST_WIDTH),
-        # L2:
-            # mask = mask >> 1
-            subleq(_start + 3 * INST_WIDTH + WORD_WIDTH, CONST_POW[2],  _start + 29 * INST_WIDTH),
-            subleq(_start + 7 * INST_WIDTH + WORD_WIDTH, CONST_POW[2],  _start + 30 * INST_WIDTH),
-            subleq(RZ, RZ, _start + 9 * INST_WIDTH),
-        # EXIT:
+        # T3 = T1
+        subleq(T3, T3, _start + 12 * INST_WIDTH),
+        subleq(RZ, T1, _start + 13 * INST_WIDTH),
+        subleq(T3, RZ, _start + 14 * INST_WIDTH),
+        # T4 = T2
+        subleq(RZ, RZ, _start + 15 * INST_WIDTH),
+        subleq(T4, T4, _start + 16 * INST_WIDTH),
+        subleq(RZ, T2, _start + 17 * INST_WIDTH),
+        subleq(T4, RZ, _start + 18 * INST_WIDTH),
+        
+        # if T3 < mask, goto L0.
+        subleq(T3, T6, _start + 23 * INST_WIDTH),
+        # T1 = T1 - mask
+        subleq(T1, T5, _start + 20 * INST_WIDTH),
+        # if T4 < mask, L1.
+        subleq(T4, T6, _start + 25 * INST_WIDTH),
+        # T2 = T2 - mask
+        subleq(T2, T5, _start + 22 * INST_WIDTH),
+        # goto L1.
+        subleq(RZ, RZ, _start + 25 * INST_WIDTH),
+    # L0:
+        # if T4 < mask, goto L2.
+        subleq(T4, T6, _start + 28 * INST_WIDTH),
+        # T2 = T2 - mask
+        subleq(T2, T5, _start + 25 * INST_WIDTH),
+    # L1:
+        # T0 = T0 + mask
+        subleq(RZ, RZ, _start + 26 * INST_WIDTH),
+        subleq(RZ, T5, _start + 27 * INST_WIDTH),
+        subleq(T0, RZ, _start + 28 * INST_WIDTH),
+    # L2:
+        # mask = mask >> 1
+        subleq(_start + 3 * INST_WIDTH + WORD_WIDTH, CONST_POW[2],  _start + 29 * INST_WIDTH),
+        subleq(_start + 7 * INST_WIDTH + WORD_WIDTH, CONST_POW[2],  _start + 30 * INST_WIDTH),
+        subleq(RZ, RZ, _start + 9 * INST_WIDTH),
+    # EXIT:
         subleq(RZ, RZ, _start)
     ]
 
@@ -291,42 +290,42 @@ def _xor(rd, rs1, rs2, line):
         # while T5 > 0: (assuming mask = T5)
         subleq(RZ, RZ, _start + 10 * INST_WIDTH),
         subleq(T5, RZ, _start + 31 * INST_WIDTH),
-            # T3 = T1
-            subleq(T3, T3, _start + 12 * INST_WIDTH),
-            subleq(RZ, T1, _start + 13 * INST_WIDTH),
-            subleq(T3, RZ, _start + 14 * INST_WIDTH),
-            # T4 = T2
-            subleq(RZ, RZ, _start + 15 * INST_WIDTH),
-            subleq(T4, T4, _start + 16 * INST_WIDTH),
-            subleq(RZ, T2, _start + 17 * INST_WIDTH),
-            subleq(T4, RZ, _start + 18 * INST_WIDTH),
-            
-            # if T3 < mask, goto L0.
-            subleq(T3, T6, _start + 23 * INST_WIDTH),
-            # T1 = T1 - mask
-            subleq(T1, T5, _start + 20 * INST_WIDTH),
-            # if T4 < mask, goto L1.
-            subleq(T4, T6, _start + 25 * INST_WIDTH),
-            # T2 = T2 - mask
-            subleq(T2, T5, _start + 22 * INST_WIDTH),
-            # goto L2.
-            subleq(RZ, RZ, _start + 29 * INST_WIDTH),
-        # L0:
-            # if T4 < mask, goto L2.
-            subleq(T4, T6, _start + 28 * INST_WIDTH),
-            # T2 = T2 - mask
-            subleq(T2, T5, _start + 25 * INST_WIDTH),
-        # L1:
-            # T0 = T0 + mask
-            subleq(RZ, RZ, _start + 26 * INST_WIDTH),
-            subleq(RZ, T5, _start + 27 * INST_WIDTH),
-            subleq(T0, RZ, _start + 28 * INST_WIDTH),
-        # L2:
-            # mask = mask >> 1
-            subleq(_start + 3 * INST_WIDTH + WORD_WIDTH, CONST_POW[2],  _start + 29 * INST_WIDTH),
-            subleq(_start + 7 * INST_WIDTH + WORD_WIDTH, CONST_POW[2],  _start + 30 * INST_WIDTH),
-            subleq(RZ, RZ, _start + 9 * INST_WIDTH),
-        # EXIT:
+        # T3 = T1
+        subleq(T3, T3, _start + 12 * INST_WIDTH),
+        subleq(RZ, T1, _start + 13 * INST_WIDTH),
+        subleq(T3, RZ, _start + 14 * INST_WIDTH),
+        # T4 = T2
+        subleq(RZ, RZ, _start + 15 * INST_WIDTH),
+        subleq(T4, T4, _start + 16 * INST_WIDTH),
+        subleq(RZ, T2, _start + 17 * INST_WIDTH),
+        subleq(T4, RZ, _start + 18 * INST_WIDTH),
+        
+        # if T3 < mask, goto L0.
+        subleq(T3, T6, _start + 23 * INST_WIDTH),
+        # T1 = T1 - mask
+        subleq(T1, T5, _start + 20 * INST_WIDTH),
+        # if T4 < mask, goto L1.
+        subleq(T4, T6, _start + 25 * INST_WIDTH),
+        # T2 = T2 - mask
+        subleq(T2, T5, _start + 22 * INST_WIDTH),
+        # goto L2.
+        subleq(RZ, RZ, _start + 29 * INST_WIDTH),
+    # L0:
+        # if T4 < mask, goto L2.
+        subleq(T4, T6, _start + 28 * INST_WIDTH),
+        # T2 = T2 - mask
+        subleq(T2, T5, _start + 25 * INST_WIDTH),
+    # L1:
+        # T0 = T0 + mask
+        subleq(RZ, RZ, _start + 26 * INST_WIDTH),
+        subleq(RZ, T5, _start + 27 * INST_WIDTH),
+        subleq(T0, RZ, _start + 28 * INST_WIDTH),
+    # L2:
+        # mask = mask >> 1
+        subleq(_start + 3 * INST_WIDTH + WORD_WIDTH, CONST_POW[2],  _start + 29 * INST_WIDTH),
+        subleq(_start + 7 * INST_WIDTH + WORD_WIDTH, CONST_POW[2],  _start + 30 * INST_WIDTH),
+        subleq(RZ, RZ, _start + 9 * INST_WIDTH),
+    # EXIT:
         subleq(RZ, RZ, _start)
     ]
 
@@ -390,33 +389,33 @@ def _sltu(rd, rs1, rs2, line):
         subleq(T3, RZ, _start + 5 * INST_WIDTH),
         # if T1 <= T2, goto L0.
         subleq(T3, T2, _start + 10 * INST_WIDTH),
-            # if T2 >= 0, goto EXIT.
-            subleq(RZ, RZ, _start + 7 * INST_WIDTH),
-            subleq(RZ, T2, _start + 31 * INST_WIDTH),
-            # if T1 <= 0, goto EXIT
-            subleq(RZ, RZ, _start + 9 * INST_WIDTH),
-            subleq(T3, RZ, _start + 31 * INST_WIDTH),
-            # goto L2.
-            subleq(RZ, RZ, _start + 18 * INST_WIDTH),
-        # L0:
-            # if T1 == T2, goto EXIT
-            subleq(RZ, RZ, _start + 12 * INST_WIDTH),
-            subleq(T3, RZ, _start + 31 * INST_WIDTH),
-        # L1:
-            # if T1 >= 0, goto L2.
-            subleq(RZ, RZ, _start + 14 * INST_WIDTH),
-            subleq(RZ, T1, _start + 18 * INST_WIDTH),
-            # if T2 <= 0, goto L2.
-            subleq(RZ, RZ, _start + 16 * INST_WIDTH),
-            subleq(T2, RZ, _start + 18 * INST_WIDTH),
-            # goto EXIT.
-            subleq(RZ, RZ, _start + 31 * INST_WIDTH),
-        # L2:
-            # T0 = 1
-            subleq(RZ, RZ, _start + 19 * INST_WIDTH),
-            subleq(RZ, CONST_POW[0], _start + 20 * INST_WIDTH),
-            subleq(T0, RZ, _start + 21 * INST_WIDTH),
-        # EXIT
+        # if T2 >= 0, goto EXIT.
+        subleq(RZ, RZ, _start + 7 * INST_WIDTH),
+        subleq(RZ, T2, _start + 31 * INST_WIDTH),
+        # if T1 <= 0, goto EXIT
+        subleq(RZ, RZ, _start + 9 * INST_WIDTH),
+        subleq(T3, RZ, _start + 31 * INST_WIDTH),
+        # goto L2.
+        subleq(RZ, RZ, _start + 18 * INST_WIDTH),
+    # L0:
+        # if T1 == T2, goto EXIT
+        subleq(RZ, RZ, _start + 12 * INST_WIDTH),
+        subleq(T3, RZ, _start + 31 * INST_WIDTH),
+    # L1:
+        # if T1 >= 0, goto L2.
+        subleq(RZ, RZ, _start + 14 * INST_WIDTH),
+        subleq(RZ, T1, _start + 18 * INST_WIDTH),
+        # if T2 <= 0, goto L2.
+        subleq(RZ, RZ, _start + 16 * INST_WIDTH),
+        subleq(T2, RZ, _start + 18 * INST_WIDTH),
+        # goto EXIT.
+        subleq(RZ, RZ, _start + 31 * INST_WIDTH),
+    # L2:
+        # T0 = 1
+        subleq(RZ, RZ, _start + 19 * INST_WIDTH),
+        subleq(RZ, CONST_POW[0], _start + 20 * INST_WIDTH),
+        subleq(T0, RZ, _start + 21 * INST_WIDTH),
+    # EXIT:
         subleq(RZ, RZ, _start + 23 * INST_WIDTH),
         subleq(RZ, RZ, _start + 23 * INST_WIDTH),
         subleq(RZ, RZ, _start)
@@ -451,17 +450,17 @@ def _sll(rd, rs1, rs2, line):
         subleq(RZ, T1, _start + 3 * INST_WIDTH),
         subleq(T0, RZ, _start + 4 * INST_WIDTH),
         subleq(RZ, RZ, _start + 5 * INST_WIDTH),
-        # LOOP:
-            # if T2 == 0, goto EXIT.
-            subleq(T2, RZ, _start + 15 * INST_WIDTH),
-            # T2 = T2 - 1
-            subleq(T2, CONST_POW[0], _start +  7 * INST_WIDTH),
-            # T0 = T0 + T0
-            subleq(RZ, T0, _start + 8 * INST_WIDTH),
-            subleq(T0, RZ, _start + 9 * INST_WIDTH),
-            # goto LOOP.
-            subleq(RZ, RZ, _start + 6 * INST_WIDTH),
-        # EXIT:
+    # LOOP:
+        # if T2 == 0, goto EXIT.
+        subleq(T2, RZ, _start + 15 * INST_WIDTH),
+        # T2 = T2 - 1
+        subleq(T2, CONST_POW[0], _start +  7 * INST_WIDTH),
+        # T0 = T0 + T0
+        subleq(RZ, T0, _start + 8 * INST_WIDTH),
+        subleq(T0, RZ, _start + 9 * INST_WIDTH),
+        # goto LOOP.
+        subleq(RZ, RZ, _start + 6 * INST_WIDTH),
+    # EXIT:
         subleq(RZ, RZ, _start + 15 * INST_WIDTH),
         subleq(RZ, RZ, _start + 15 * INST_WIDTH),
         subleq(RZ, RZ, _start + 15 * INST_WIDTH),
@@ -510,50 +509,50 @@ def _srl():
         # while T2 > 0:
         subleq(RZ, RZ, _start + 8 * INST_WIDTH),
         subleq(T2, RZ, _start + 47 * INST_WIDTH),
-            # T4 = T1
-            subleq(T4, T4, _start + 10 * INST_WIDTH),
-            subleq(RZ, T1, _start + 11 * INST_WIDTH),
-            subleq(T4, RZ, _start + 12 * INST_WIDTH),
-            # T5 = 2^31
-            subleq(RZ, RZ, _start + 13 * INST_WIDTH),
-            subleq(T5, T5, _start + 14 * INST_WIDTH),
-            subleq(RZ, CONST_POW[31], _start + 15 * INST_WIDTH),
-            subleq(T5, RZ, _start + 16 * INST_WIDTH),
-            # T6 = 2^31-1
-            subleq(RZ, RZ, _start + 17 * INST_WIDTH),
-            subleq(T6, T6, _start + 18 * INST_WIDTH),
-            subleq(RZ, CONST_ONE[31], _start + 19 * INST_WIDTH),
-            subleq(T6, RZ, _start + 20 * INST_WIDTH),
-            # T7 = 2^30
-            subleq(RZ, RZ, _start + 21 * INST_WIDTH),
-            subleq(T7, T7, _start + 22 * INST_WIDTH),
-            subleq(RZ, CONST_POW[30], _start + 23 * INST_WIDTH),
-            subleq(T7, RZ, _start + 24 * INST_WIDTH),
-            # while T7 > 0: (assuming mask = T5)
-            subleq(RZ, RZ, _start + 25 * INST_WIDTH),
-            subleq(T7, RZ, _start + 38 * INST_WIDTH),
-                # T3 = T4
-                subleq(T3, T3, _start + 27 * INST_WIDTH),
-                subleq(RZ, T4, _start + 28 * INST_WIDTH),
-                subleq(T3, RZ, _start + 29 * INST_WIDTH),
-                # if T3 < mask, goto L0.
-                subleq(T3, T6, _start + 34 * INST_WIDTH),
-                # T4 = T4 - mask
-                subleq(T4, T5, _start + 31 * INST_WIDTH),
-                # T0 = T0 + T7
-                subleq(RZ, RZ, _start + 32 * INST_WIDTH),
-                subleq(RZ, T7, _start + 33 * INST_WIDTH),
-                subleq(T0, RZ, _start + 34 * INST_WIDTH),
-            # L0:
-                # mask = mask >> 1
-                subleq(_start + 11 * INST_WIDTH + WORD_WIDTH, CONST_POW[2],  _start + 35 * INST_WIDTH),
-                subleq(_start + 15 * INST_WIDTH + WORD_WIDTH, CONST_POW[2],  _start + 36 * INST_WIDTH),
-                subleq(_start + 19 * INST_WIDTH + WORD_WIDTH, CONST_POW[2],  _start + 37 * INST_WIDTH),
-                subleq(RZ, RZ, _start + 24 * INST_WIDTH),
-            # T2 = T2 - 1
-            subleq(T2, CONST_POW[0], _start + 39 * INST_WIDTH),
-            subleq(RZ, RZ, _start + 7 * INST_WIDTH),
-        # EXIT:
+        # T4 = T1
+        subleq(T4, T4, _start + 10 * INST_WIDTH),
+        subleq(RZ, T1, _start + 11 * INST_WIDTH),
+        subleq(T4, RZ, _start + 12 * INST_WIDTH),
+        # T5 = 2^31
+        subleq(RZ, RZ, _start + 13 * INST_WIDTH),
+        subleq(T5, T5, _start + 14 * INST_WIDTH),
+        subleq(RZ, CONST_POW[31], _start + 15 * INST_WIDTH),
+        subleq(T5, RZ, _start + 16 * INST_WIDTH),
+        # T6 = 2^31-1
+        subleq(RZ, RZ, _start + 17 * INST_WIDTH),
+        subleq(T6, T6, _start + 18 * INST_WIDTH),
+        subleq(RZ, CONST_ONE[31], _start + 19 * INST_WIDTH),
+        subleq(T6, RZ, _start + 20 * INST_WIDTH),
+        # T7 = 2^30
+        subleq(RZ, RZ, _start + 21 * INST_WIDTH),
+        subleq(T7, T7, _start + 22 * INST_WIDTH),
+        subleq(RZ, CONST_POW[30], _start + 23 * INST_WIDTH),
+        subleq(T7, RZ, _start + 24 * INST_WIDTH),
+        # while T7 > 0: (assuming mask = T5)
+        subleq(RZ, RZ, _start + 25 * INST_WIDTH),
+        subleq(T7, RZ, _start + 38 * INST_WIDTH),
+        # T3 = T4
+        subleq(T3, T3, _start + 27 * INST_WIDTH),
+        subleq(RZ, T4, _start + 28 * INST_WIDTH),
+        subleq(T3, RZ, _start + 29 * INST_WIDTH),
+        # if T3 < mask, goto L0.
+        subleq(T3, T6, _start + 34 * INST_WIDTH),
+        # T4 = T4 - mask
+        subleq(T4, T5, _start + 31 * INST_WIDTH),
+        # T0 = T0 + T7
+        subleq(RZ, RZ, _start + 32 * INST_WIDTH),
+        subleq(RZ, T7, _start + 33 * INST_WIDTH),
+        subleq(T0, RZ, _start + 34 * INST_WIDTH),
+    # L0:
+        # mask = mask >> 1
+        subleq(_start + 11 * INST_WIDTH + WORD_WIDTH, CONST_POW[2],  _start + 35 * INST_WIDTH),
+        subleq(_start + 15 * INST_WIDTH + WORD_WIDTH, CONST_POW[2],  _start + 36 * INST_WIDTH),
+        subleq(_start + 19 * INST_WIDTH + WORD_WIDTH, CONST_POW[2],  _start + 37 * INST_WIDTH),
+        subleq(RZ, RZ, _start + 24 * INST_WIDTH),
+        # T2 = T2 - 1
+        subleq(T2, CONST_POW[0], _start + 39 * INST_WIDTH),
+        subleq(RZ, RZ, _start + 7 * INST_WIDTH),
+    # EXIT:
         subleq(RZ, RZ, _start + 47 * INST_WIDTH),
         subleq(RZ, RZ, _start + 47 * INST_WIDTH),
         subleq(RZ, RZ, _start + 47 * INST_WIDTH),
@@ -606,58 +605,58 @@ def _sra():
         # while T2 > 0:
         subleq(RZ, RZ, _start + 8 * INST_WIDTH),
         subleq(T2, RZ, _start + 47 * INST_WIDTH),
-            # T4 = T1
-            subleq(T4, T4, _start + 10 * INST_WIDTH),
-            subleq(RZ, T1, _start + 11 * INST_WIDTH),
-            subleq(T4, RZ, _start + 12 * INST_WIDTH),
-            # T5 = 2^31
-            subleq(RZ, RZ, _start + 13 * INST_WIDTH),
-            subleq(T5, T5, _start + 14 * INST_WIDTH),
-            subleq(RZ, CONST_POW[31], _start + 15 * INST_WIDTH),
-            subleq(T5, RZ, _start + 16 * INST_WIDTH),
-            # T6 = 2^31-1
-            subleq(RZ, RZ, _start + 17 * INST_WIDTH),
-            subleq(T6, T6, _start + 18 * INST_WIDTH),
-            subleq(RZ, CONST_ONE[31], _start + 19 * INST_WIDTH),
-            subleq(T6, RZ, _start + 20 * INST_WIDTH),
-            # T7 = 2^30
-            subleq(RZ, RZ, _start + 21 * INST_WIDTH),
-            subleq(T7, T7, _start + 22 * INST_WIDTH),
-            subleq(RZ, CONST_POW[30], _start + 23 * INST_WIDTH),
-            subleq(T7, RZ, _start + 24 * INST_WIDTH),
-            # while T7 > 0: (assuming mask = T5)
-            subleq(RZ, RZ, _start + 25 * INST_WIDTH),
-            subleq(T7, RZ, _start + 38 * INST_WIDTH),
-                # T3 = T4
-                subleq(T3, T3, _start + 27 * INST_WIDTH),
-                subleq(RZ, T4, _start + 28 * INST_WIDTH),
-                subleq(T3, RZ, _start + 29 * INST_WIDTH),
-                # if T3 < mask, goto L0.
-                subleq(T3, T6, _start + 34 * INST_WIDTH),
-                # T4 = T4 - mask
-                subleq(T4, T5, _start + 31 * INST_WIDTH),
-                # T0 = T0 + T7
-                subleq(RZ, RZ, _start + 32 * INST_WIDTH),
-                subleq(RZ, T7, _start + 33 * INST_WIDTH),
-                subleq(T0, RZ, _start + 34 * INST_WIDTH),
-            # L0:
-                # mask = mask >> 1
-                subleq(_start + 11 * INST_WIDTH + WORD_WIDTH, CONST_POW[2], _start + 35 * INST_WIDTH),
-                subleq(_start + 15 * INST_WIDTH + WORD_WIDTH, CONST_POW[2], _start + 36 * INST_WIDTH),
-                subleq(_start + 19 * INST_WIDTH + WORD_WIDTH, CONST_POW[2], _start + 37 * INST_WIDTH),
-                subleq(RZ, RZ, _start + 25 * INST_WIDTH),
-            # T2 = T2 - 1
-            subleq(T2, CONST_POW[0], _start + 39 * INST_WIDTH),
-            # T0 = T0 + 2^31 if T0 - 2^30 > 0
-            subleq(T3, T3, _start + 40 * INST_WIDTH),
-            subleq(RZ, T0, _start + 41 * INST_WIDTH),
-            subleq(T3, RZ, _start + 42 * INST_WIDTH),
-            subleq(T3, CONST_ONE[30], _start + 7 * INST_WIDTH),
-            subleq(RZ, RZ, _start + 44 * INST_WIDTH),
-            subleq(RZ, CONST_POW[31], _start + 45 * INST_WIDTH),
-            subleq(T0, RZ, _start + 46 * INST_WIDTH),
-            subleq(RZ, RZ, _start + 7 * INST_WIDTH),
-        # EXIT:
+        # T4 = T1
+        subleq(T4, T4, _start + 10 * INST_WIDTH),
+        subleq(RZ, T1, _start + 11 * INST_WIDTH),
+        subleq(T4, RZ, _start + 12 * INST_WIDTH),
+        # T5 = 2^31
+        subleq(RZ, RZ, _start + 13 * INST_WIDTH),
+        subleq(T5, T5, _start + 14 * INST_WIDTH),
+        subleq(RZ, CONST_POW[31], _start + 15 * INST_WIDTH),
+        subleq(T5, RZ, _start + 16 * INST_WIDTH),
+        # T6 = 2^31-1
+        subleq(RZ, RZ, _start + 17 * INST_WIDTH),
+        subleq(T6, T6, _start + 18 * INST_WIDTH),
+        subleq(RZ, CONST_ONE[31], _start + 19 * INST_WIDTH),
+        subleq(T6, RZ, _start + 20 * INST_WIDTH),
+        # T7 = 2^30
+        subleq(RZ, RZ, _start + 21 * INST_WIDTH),
+        subleq(T7, T7, _start + 22 * INST_WIDTH),
+        subleq(RZ, CONST_POW[30], _start + 23 * INST_WIDTH),
+        subleq(T7, RZ, _start + 24 * INST_WIDTH),
+        # while T7 > 0: (assuming mask = T5)
+        subleq(RZ, RZ, _start + 25 * INST_WIDTH),
+        subleq(T7, RZ, _start + 38 * INST_WIDTH),
+        # T3 = T4
+        subleq(T3, T3, _start + 27 * INST_WIDTH),
+        subleq(RZ, T4, _start + 28 * INST_WIDTH),
+        subleq(T3, RZ, _start + 29 * INST_WIDTH),
+        # if T3 < mask, goto L0.
+        subleq(T3, T6, _start + 34 * INST_WIDTH),
+        # T4 = T4 - mask
+        subleq(T4, T5, _start + 31 * INST_WIDTH),
+        # T0 = T0 + T7
+        subleq(RZ, RZ, _start + 32 * INST_WIDTH),
+        subleq(RZ, T7, _start + 33 * INST_WIDTH),
+        subleq(T0, RZ, _start + 34 * INST_WIDTH),
+    # L0:
+        # mask = mask >> 1
+        subleq(_start + 11 * INST_WIDTH + WORD_WIDTH, CONST_POW[2], _start + 35 * INST_WIDTH),
+        subleq(_start + 15 * INST_WIDTH + WORD_WIDTH, CONST_POW[2], _start + 36 * INST_WIDTH),
+        subleq(_start + 19 * INST_WIDTH + WORD_WIDTH, CONST_POW[2], _start + 37 * INST_WIDTH),
+        subleq(RZ, RZ, _start + 25 * INST_WIDTH),
+        # T2 = T2 - 1
+        subleq(T2, CONST_POW[0], _start + 39 * INST_WIDTH),
+        # T0 = T0 + 2^31 if T0 - 2^30 > 0
+        subleq(T3, T3, _start + 40 * INST_WIDTH),
+        subleq(RZ, T0, _start + 41 * INST_WIDTH),
+        subleq(T3, RZ, _start + 42 * INST_WIDTH),
+        subleq(T3, CONST_ONE[30], _start + 7 * INST_WIDTH),
+        subleq(RZ, RZ, _start + 44 * INST_WIDTH),
+        subleq(RZ, CONST_POW[31], _start + 45 * INST_WIDTH),
+        subleq(T0, RZ, _start + 46 * INST_WIDTH),
+        subleq(RZ, RZ, _start + 7 * INST_WIDTH),
+    # EXIT:
         subleq(RZ, RZ, _start)
     ]
 
