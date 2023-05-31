@@ -477,12 +477,19 @@ def _srl():
         T1: (rs1)
         T2: (rs2)
     Pseudocode:
-        T0 <= 0
-        T0 <= T0 - (0 - T1)
-        L0:
-            if T2 <= 0, goto L1.
-            
-        L1:
+        T0 = 0
+        while T2 > 0:
+            mask = 1 << 31
+            half = 1 << 30
+            T3 = T1
+            T2 = T2 - 1
+            while mask > 1:
+                if T3 < mask, goto L0.
+                T3 = T3 - mask
+                T0 = T0 + half
+            L0:
+                mask = mask >> 1
+                half = half >> 1
     Final state:
         T0: (rs1) >> (rs2)
 
@@ -564,12 +571,21 @@ def _sra():
         T1: (rs1)
         T2: (rs2)
     Pseudocode:
-        T0 <= 0
-        T0 <= T0 - (0 - T1)
-        L0:
-            if T2 <= 0, goto L1.
-            
-        L1:
+        T0 = 0
+        while T2 > 0:
+            mask = 1 << 31
+            half = 1 << 30
+            T3 = T1
+            T2 = T2 - 1
+            while mask > 1:
+                if T3 < mask, goto L0.
+                T3 = T3 - mask
+                T0 = T0 + half
+                if T0 < 2^30, goto L0.
+                T0 = T0 + 2^31
+            L0:
+                mask = mask >> 1
+                half = half >> 1
     Final state:
         T0: (rs1) >>> (rs2)
 
