@@ -545,9 +545,9 @@ def _srl():
         subleq(T0, RZ, _start + 34 * INST_WIDTH),
     # L0:
         # mask = mask >> 1
-        subleq(_start + 11 * INST_WIDTH + WORD_WIDTH, CONST_POW[2],  _start + 35 * INST_WIDTH),
-        subleq(_start + 15 * INST_WIDTH + WORD_WIDTH, CONST_POW[2],  _start + 36 * INST_WIDTH),
-        subleq(_start + 19 * INST_WIDTH + WORD_WIDTH, CONST_POW[2],  _start + 37 * INST_WIDTH),
+        subleq(_start + 14 * INST_WIDTH + WORD_WIDTH, CONST_POW[2],  _start + 35 * INST_WIDTH),
+        subleq(_start + 18 * INST_WIDTH + WORD_WIDTH, CONST_POW[2],  _start + 36 * INST_WIDTH),
+        subleq(_start + 22 * INST_WIDTH + WORD_WIDTH, CONST_POW[2],  _start + 37 * INST_WIDTH),
         subleq(RZ, RZ, _start + 24 * INST_WIDTH),
         # T2 = T2 - 1
         subleq(T2, CONST_POW[0], _start + 39 * INST_WIDTH),
@@ -641,9 +641,9 @@ def _sra():
         subleq(T0, RZ, _start + 34 * INST_WIDTH),
     # L0:
         # mask = mask >> 1
-        subleq(_start + 11 * INST_WIDTH + WORD_WIDTH, CONST_POW[2], _start + 35 * INST_WIDTH),
-        subleq(_start + 15 * INST_WIDTH + WORD_WIDTH, CONST_POW[2], _start + 36 * INST_WIDTH),
-        subleq(_start + 19 * INST_WIDTH + WORD_WIDTH, CONST_POW[2], _start + 37 * INST_WIDTH),
+        subleq(_start + 14 * INST_WIDTH + WORD_WIDTH, CONST_POW[2], _start + 35 * INST_WIDTH),
+        subleq(_start + 18 * INST_WIDTH + WORD_WIDTH, CONST_POW[2], _start + 36 * INST_WIDTH),
+        subleq(_start + 22 * INST_WIDTH + WORD_WIDTH, CONST_POW[2], _start + 37 * INST_WIDTH),
         subleq(RZ, RZ, _start + 25 * INST_WIDTH),
         # T2 = T2 - 1
         subleq(T2, CONST_POW[0], _start + 39 * INST_WIDTH),
@@ -660,13 +660,142 @@ def _sra():
         subleq(RZ, RZ, _start)
     ]
 
+def _beq():
+    """ beq rs1,rs2,offset
+
+    Initial state:
+        T1: (rs1)
+        T2: (rs2)
+    Final state:
+        if rs1 == rs2, pc += offset.
+
+    Returns:
+        list: target instruction sequence
+    """
+    _start = int(0x00000c00) | PRC_MASK
+    return [
+        subleq(T0, T0, _start + 1 * INST_WIDTH),
+        subleq(RZ, RZ, _start + 2 * INST_WIDTH),
+        subleq(RZ, T1, _start + 3 * INST_WIDTH),
+        subleq(T0, RZ, _start + 4 * INST_WIDTH),
+        subleq(T0, T2, _start + 5 * INST_WIDTH),
+        subleq(RZ, RZ, _start + 6 * INST_WIDTH),
+        subleq(T0, RZ, _start),
+        subleq(RZ, RZ, _start),
+    ]
+
+def _blt():
+    """ blt rs1,rs2,offset
+
+    Initial state:
+        T1: (rs1)
+        T2: (rs2)
+    Final state:
+        if rs1 < rs2, pc += offset.
+
+    Returns:
+        list: target instruction sequence
+    """
+    _start = int(0x00000c00) | PRC_MASK
+    return [
+        subleq(T0, T0, _start + 1 * INST_WIDTH),
+        subleq(RZ, RZ, _start + 2 * INST_WIDTH),
+        subleq(RZ, RZ, _start + 3 * INST_WIDTH),
+        subleq(RZ, T2, _start + 4 * INST_WIDTH),
+        subleq(T0, RZ, _start + 5 * INST_WIDTH),
+        subleq(T0, T1, _start + 7 * INST_WIDTH),
+        subleq(RZ, RZ, _start),
+        subleq(RZ, RZ, _start),
+    ]
+
+def _lw():
+    """ lw rd,offset(rs1)
+
+    Initial state:
+        T1: (rs1)
+        T2: (offset)
+    Final state:
+        T0: MEM[(rs1)+offset]
+
+    Returns:
+        list: target instruction sequence
+    """
+    
+    _start = int(0x00000c60) | PRC_MASK
+    return [
+        subleq(T0, T0, _start + 1 * INST_WIDTH),
+        subleq(RZ, RZ, _start + 2 * INST_WIDTH),
+        subleq(RZ, T1, _start + 3 * INST_WIDTH),
+        subleq(_start + 7 * INST_WIDTH + WORD_WIDTH, RZ, _start + 4 * INST_WIDTH),
+        subleq(RZ, RZ, _start + 5 * INST_WIDTH),
+        subleq(RZ, T2, _start + 6 * INST_WIDTH),
+        subleq(_start + 7 * INST_WIDTH + WORD_WIDTH, RZ, _start + 7 * INST_WIDTH),
+        subleq(T0, 0,  _start + 8 * INST_WIDTH),
+        subleq(RZ, RZ, _start + 15 * INST_WIDTH),
+        subleq(RZ, RZ, _start + 15 * INST_WIDTH),
+        subleq(RZ, RZ, _start + 15 * INST_WIDTH),
+        subleq(RZ, RZ, _start + 15 * INST_WIDTH),
+        subleq(RZ, RZ, _start + 15 * INST_WIDTH),
+        subleq(RZ, RZ, _start + 15 * INST_WIDTH),
+        subleq(RZ, RZ, _start + 15 * INST_WIDTH),
+        subleq(RZ, RZ, _start),
+    ]
+
+def _sw():
+    """ sw rs2,offset(rs1)
+
+    Initial state:
+        T1: (rs1)
+        T2: (rs2)
+        T3: offset
+    Final state:
+        MEM[(rs1)+offset] = (rs2)
+
+    Returns:
+        list: target instruction sequence
+    """
+    
+    _start = int(0x00000d20) | PRC_MASK
+    return [
+        subleq(T0, T0, _start + 1 * INST_WIDTH),
+        subleq(RZ, RZ, _start + 2 * INST_WIDTH),
+        subleq(RZ, T1, _start + 3 * INST_WIDTH),
+        subleq(_start + 7 * INST_WIDTH, RZ, _start + 4 * INST_WIDTH),
+        subleq(RZ, RZ, _start + 5 * INST_WIDTH),
+        subleq(RZ, T2, _start + 6 * INST_WIDTH),
+        subleq(_start + 7 * INST_WIDTH, RZ, _start + 7 * INST_WIDTH),
+        subleq(0,  T3, _start + 8 * INST_WIDTH),
+        subleq(RZ, RZ, _start + 15 * INST_WIDTH),
+        subleq(RZ, RZ, _start + 15 * INST_WIDTH),
+        subleq(RZ, RZ, _start + 15 * INST_WIDTH),
+        subleq(RZ, RZ, _start + 15 * INST_WIDTH),
+        subleq(RZ, RZ, _start + 15 * INST_WIDTH),
+        subleq(RZ, RZ, _start + 15 * INST_WIDTH),
+        subleq(RZ, RZ, _start + 15 * INST_WIDTH),
+        subleq(RZ, RZ, _start),
+    ]
+
+def transform(inst:list) -> list:
+    pass
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("file", type=str, help="select source binary file")
     parser.add_argument("-o", "--output", type=str, default="a.out", help="place target binary file")
     args = parser.parse_args()
+    
+    origin_inst = []
+    target_inst = []
 
     with open(args.file, "r") as f:
-        inst = int.from_bytes(f.read(4), byteorder="little", signed=False)
+        while True:
+            inst = f.read(4)
+            if inst:
+                origin_inst.append(int.from_bytes(bytes(inst), byteorder="little", signed=False))
+            else:
+                break
     
+    target_inst = transform(origin_inst)
+    
+    with open(args.output, "w") as f:
+        f.write(target_inst)

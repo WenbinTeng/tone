@@ -49,8 +49,8 @@ class emu:
         self.mmio_wr(self.pc, r)
         if r <= 0:
             self.pc = c
-
-
+        else:
+            self.pc = self.pc + 12
 
 if __name__ == "__main__":
     e = emu()
