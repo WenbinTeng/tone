@@ -29,7 +29,7 @@ We use the MMIO to allocate a memory space for RISCV execution registers, variab
 
 The figure below shows how it works.
 
-![](/asset/mmio.png)
+![](./asset/mmio.png)
 
 
 
