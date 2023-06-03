@@ -775,9 +775,39 @@ def _sw():
         subleq(RZ, RZ, _start),
     ]
 
-def transform(inst:list) -> list:
-    pass
-
+def transform(l:list) -> list:
+    inst_list = list()
+    addr_dict = dict()
+    code_dict = {
+        0x0033: "add",
+        0x8033: "sub",
+        0x0133: "slt",
+        0x01b3: "sltu",
+        0x00b3: "sll",
+        0x02b3: "srl",
+        0x82b3: "sra",
+        0x0233: "xor",
+        0x0333: "or",
+        0x03b3: "and",
+        0x0013: "addi",
+        0x0113: "slti",
+        0x0193: "sltiu",
+        0x0213: "xori",
+        0x0313: "ori",
+        0x0393: "andi",
+        0x0093: "slli",
+        0x0293: "srli",
+        0x8293: "srai",
+        0x0123: "sw",
+        0x0103: "lw",
+        0x0063: "beq",
+        0x00e3: "bne",
+        0x0263: "blt",
+        0x02e3: "bge",
+        0x0363: "bltu",
+        0x03e3: "bgeu"
+    }
+    
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("file", type=str, help="select source binary file")
