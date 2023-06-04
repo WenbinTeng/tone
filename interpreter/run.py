@@ -1,4 +1,5 @@
 import argparse
+from rvdecoder import *
 
 WORD_WIDTH = 4
 INST_WIDTH = 3 * WORD_WIDTH
@@ -21,6 +22,37 @@ CONST_ONE = [int(0xffffc180) + x * WORD_WIDTH for x in range(0,32)]
 
 RZ  = int(0xffffc200)
 
+ADD_START   = int(0x00000000)
+ADD_END     = int(0x00000054)
+SUB_START   = int(0x00000060)
+SUB_END     = int(0x000000b4)
+AND_START   = int(0x000000c0)
+AND_END     = int(0x00000234)
+OR_START    = int(0x00000240)
+OR_START    = int(0x000003b4)
+XOR_START   = int(0x000003c0)
+XOR_END     = int(0x00000534)
+SLT_START   = int(0x00000540)
+SLT_END     = int(0x00000594)
+SLTU_START  = int(0x000005a0)
+SLTU_END    = int(0x000006b4)
+SLL_START   = int(0x000006c0)
+SLL_END     = int(0x00000774)
+SRL_START   = int(0x00000780)
+SRL_END     = int(0x000009b4)
+SRA_START   = int(0x000009c0)
+SRA_END     = int(0x00000bf4)
+BEQ_START   = int(0x00000c00)
+BEQ_END     = int(0x00000c54)
+BLT_START   = int(0x00000c60)
+BLT_END     = int(0x00000cb4)
+BLTU_START  = int(0x00000cc0)
+BLTU_END    = int(0x00000dd4)
+LW_START    = int(0x00000de0)
+LW_END      = int(0x00000e94)
+SW_START    = int(0x00000ea0)
+SW_END      = int(0x00000f54)
+
 def subleq(a, b, c):
     return [a, b, c]
 
@@ -40,7 +72,7 @@ def _add():
     Returns:
         list: target instruction sequence
     """
-    _start = int(0x00000000) | PRC_MASK
+    _start = ADD_START | PRC_MASK
     return [
         subleq(T0, T0, _start + 1 * INST_WIDTH),
         subleq(RZ, RZ, _start + 2 * INST_WIDTH),
@@ -68,7 +100,7 @@ def _sub():
     Returns:
         list: target instruction sequence
     """
-    _start = int(0x00000060) | PRC_MASK
+    _start = SUB_START | PRC_MASK
     return [
         subleq(T0, T0, _start + 1 * INST_WIDTH),
         subleq(RZ, RZ, _start + 2 * INST_WIDTH),
@@ -106,7 +138,7 @@ def _and(rd, rs1, rs2, line):
     Returns:
         list: target instruction sequence
     """
-    _start = int(0x00000c0) | PRC_MASK
+    _start = AND_START | PRC_MASK
     return [
         # T0 = 0
         subleq(T0, T0, _start + 1 * INST_WIDTH),
@@ -189,7 +221,7 @@ def _or(rd, rs1, rs2, line):
     Returns:
         list: target instruction sequence
     """
-    _start = int(0x00000240) | PRC_MASK
+    _start = OR_START | PRC_MASK
     return [
         # T0 = 0
         subleq(T0, T0, _start + 1 * INST_WIDTH),
@@ -273,7 +305,7 @@ def _xor(rd, rs1, rs2, line):
     Returns:
         list: target instruction sequence
     """
-    _start = int(0x000003c0) | PRC_MASK
+    _start = XOR_START | PRC_MASK
     return [
         # T0 = 0
         subleq(T0, T0, _start + 1 * INST_WIDTH),
@@ -347,7 +379,7 @@ def _slt(rd, rs1, rs2, line):
     Returns:
         list: target instruction sequence
     """
-    _start = int(0x00000540) | PRC_MASK
+    _start = SLT_START | PRC_MASK
     return [
         subleq(T0, T0, _start + 1 * INST_WIDTH),
         subleq(T2, T1, _start + 7 * INST_WIDTH),
@@ -378,7 +410,7 @@ def _sltu(rd, rs1, rs2, line):
     Returns:
         list: target instruction sequence
     """
-    _start = int(0x000005a0) | PRC_MASK
+    _start = SLTU_START | PRC_MASK
     return [
         # T0 = 0
         subleq(T0, T0, _start + 1 * INST_WIDTH),
@@ -391,16 +423,16 @@ def _sltu(rd, rs1, rs2, line):
         subleq(T3, T2, _start + 10 * INST_WIDTH),
         # if T2 >= 0, goto EXIT.
         subleq(RZ, RZ, _start + 7 * INST_WIDTH),
-        subleq(RZ, T2, _start + 31 * INST_WIDTH),
+        subleq(RZ, T2, _start + 23 * INST_WIDTH),
         # if T1 <= 0, goto EXIT
         subleq(RZ, RZ, _start + 9 * INST_WIDTH),
-        subleq(T3, RZ, _start + 31 * INST_WIDTH),
+        subleq(T3, RZ, _start + 23 * INST_WIDTH),
         # goto L2.
         subleq(RZ, RZ, _start + 18 * INST_WIDTH),
     # L0:
         # if T1 == T2, goto EXIT
         subleq(RZ, RZ, _start + 12 * INST_WIDTH),
-        subleq(T3, RZ, _start + 31 * INST_WIDTH),
+        subleq(T3, RZ, _start + 23 * INST_WIDTH),
     # L1:
         # if T1 >= 0, goto L2.
         subleq(RZ, RZ, _start + 14 * INST_WIDTH),
@@ -409,7 +441,7 @@ def _sltu(rd, rs1, rs2, line):
         subleq(RZ, RZ, _start + 16 * INST_WIDTH),
         subleq(T2, RZ, _start + 18 * INST_WIDTH),
         # goto EXIT.
-        subleq(RZ, RZ, _start + 31 * INST_WIDTH),
+        subleq(RZ, RZ, _start + 23 * INST_WIDTH),
     # L2:
         # T0 = 1
         subleq(RZ, RZ, _start + 19 * INST_WIDTH),
@@ -442,7 +474,7 @@ def _sll(rd, rs1, rs2, line):
     Returns:
         list: target instruction sequence
     """
-    _start = int(0x000006c0) | PRC_MASK
+    _start = SLL_START | PRC_MASK
     return [
         # T0 = T1
         subleq(T0, T0, _start + 1 * INST_WIDTH),
@@ -495,7 +527,7 @@ def _srl():
     Returns:
         list: target instruction sequence
     """
-    _start = int(0x00000780) | PRC_MASK
+    _start = SRL_START | PRC_MASK
     return [
         # T0 = T1
         subleq(T0, T0, _start + 1 * INST_WIDTH),
@@ -591,7 +623,7 @@ def _sra():
     Returns:
         list: target instruction sequence
     """
-    _start = int(0x000009c0) | PRC_MASK
+    _start = SRA_START | PRC_MASK
     return [
         # T0 = T1
         subleq(T0, T0, _start + 1 * INST_WIDTH),
@@ -672,7 +704,7 @@ def _beq():
     Returns:
         list: target instruction sequence
     """
-    _start = int(0x00000c00) | PRC_MASK
+    _start = BEQ_START | PRC_MASK
     return [
         subleq(T0, T0, _start + 1 * INST_WIDTH),
         subleq(RZ, RZ, _start + 2 * INST_WIDTH),
@@ -691,12 +723,12 @@ def _blt():
         T1: (rs1)
         T2: (rs2)
     Final state:
-        if rs1 < rs2, pc += offset.
+        if signed(rs1) < signed(rs2), pc += offset.
 
     Returns:
         list: target instruction sequence
     """
-    _start = int(0x00000c00) | PRC_MASK
+    _start = BLT_START | PRC_MASK
     return [
         subleq(T0, T0, _start + 1 * INST_WIDTH),
         subleq(RZ, RZ, _start + 2 * INST_WIDTH),
@@ -706,6 +738,60 @@ def _blt():
         subleq(T0, T1, _start + 7 * INST_WIDTH),
         subleq(RZ, RZ, _start),
         subleq(RZ, RZ, _start),
+    ]
+    
+def _bltu():
+    """ bltu rs1,rs2,offset
+
+    Initial state:
+        T1: (rs1)
+        T2: (rs2)
+    Final state:
+        if unsigned(rs1) < unsigned(rs2), pc += offset.
+
+    Returns:
+        list: target instruction sequence
+    """
+    _start = BLTU_START | PRC_MASK
+    return [
+        # T0 = 0
+        subleq(T0, T0, _start + 1 * INST_WIDTH),
+        # T3 = T1
+        subleq(RZ, RZ, _start + 2 * INST_WIDTH),
+        subleq(T3, T3, _start + 3 * INST_WIDTH),
+        subleq(RZ, T1, _start + 4 * INST_WIDTH),
+        subleq(T3, RZ, _start + 5 * INST_WIDTH),
+        # if T1 <= T2, goto L0.
+        subleq(T3, T2, _start + 10 * INST_WIDTH),
+        # if T2 >= 0, goto EXIT.
+        subleq(RZ, RZ, _start + 7 * INST_WIDTH),
+        subleq(RZ, T2, _start + 23 * INST_WIDTH),
+        # if T1 <= 0, goto EXIT
+        subleq(RZ, RZ, _start + 9 * INST_WIDTH),
+        subleq(T3, RZ, _start + 23 * INST_WIDTH),
+        # goto BRANCH.
+        subleq(RZ, RZ, _start + 22 * INST_WIDTH),
+    # L0:
+        # if T1 == T2, goto EXIT
+        subleq(RZ, RZ, _start + 12 * INST_WIDTH),
+        subleq(T3, RZ, _start + 23 * INST_WIDTH),
+    # L1:
+        # if T1 >= 0, goto BRANCH.
+        subleq(RZ, RZ, _start + 14 * INST_WIDTH),
+        subleq(RZ, T1, _start + 22 * INST_WIDTH),
+        # if T2 <= 0, goto BRANCH.
+        subleq(RZ, RZ, _start + 16 * INST_WIDTH),
+        subleq(T2, RZ, _start + 22 * INST_WIDTH),
+        # goto EXIT.
+        subleq(RZ, RZ, _start + 23 * INST_WIDTH),
+        subleq(RZ, RZ, _start + 23 * INST_WIDTH),
+        subleq(RZ, RZ, _start + 23 * INST_WIDTH),
+        subleq(RZ, RZ, _start + 23 * INST_WIDTH),
+        subleq(RZ, RZ, _start + 23 * INST_WIDTH),
+    # BRANCH:
+        subleq(RZ, RZ, _start),
+    # EXIT:
+        subleq(RZ, RZ, _start)
     ]
 
 def _lw():
@@ -721,7 +807,7 @@ def _lw():
         list: target instruction sequence
     """
     
-    _start = int(0x00000c60) | PRC_MASK
+    _start = LW_START | PRC_MASK
     return [
         subleq(T0, T0, _start + 1 * INST_WIDTH),
         subleq(RZ, RZ, _start + 2 * INST_WIDTH),
@@ -755,7 +841,7 @@ def _sw():
         list: target instruction sequence
     """
     
-    _start = int(0x00000d20) | PRC_MASK
+    _start = SW_START | PRC_MASK
     return [
         subleq(T0, T0, _start + 1 * INST_WIDTH),
         subleq(RZ, RZ, _start + 2 * INST_WIDTH),
@@ -776,6 +862,7 @@ def _sw():
     ]
 
 def transform(l:list) -> list:
+    pc = 0
     inst_list = list()
     addr_dict = dict()
     code_dict = {
