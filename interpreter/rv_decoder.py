@@ -1,4 +1,4 @@
-class rvdecoder:
+class rv_decoder:
     def __init__(self, inst:int):
         self.opcode =  inst        & 0x7f
         self.funct3 = (inst >> 12) & 0x07
