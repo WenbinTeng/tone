@@ -1,12 +1,10 @@
 module core (
     input           clk,
     input           rst,
-    output          mem_rd_en,
-    input   [31:0]  mem_rd_data,
-    output  [31:0]  mem_rd_addr,
-    output          mem_wr_en,
-    output  [31:0]  mem_wr_addr,
-    output  [31:0]  mem_wr_data,
+    input           cpu_en,
+    output          mem_we,
+    output  [31:0]  mem_addr,
+    inout   [31:0]  mem_data
 );
     
     reg  [ 5:0] state;
@@ -23,19 +21,19 @@ module core (
 
     always @(posedge clk or posedge rst) begin
         if      (rst)       a <= 'b0;
-        else if (state[0])  a <= mem_rd_data;
-        else if (state[3])  a <= mem_rd_data;
+        else if (state[0])  a <= mem_data;
+        else if (state[3])  a <= mem_data;
     end
 
     always @(posedge clk or posedge rst) begin
         if      (rst)       b <= 'b0;
-        else if (state[1])  b <= mem_rd_data;
-        else if (state[4])  b <= mem_rd_data;
+        else if (state[1])  b <= mem_data;
+        else if (state[4])  b <= mem_data;
     end
 
     always @(posedge clk or posedge rst) begin
         if      (rst)       c <= 'b0;
-        else if (state[2])  c <= mem_rd_data;
+        else if (state[2])  c <= mem_data;
     end
 
     always @(posedge clk or posedge rst) begin
@@ -43,15 +41,15 @@ module core (
         else if (state[5])  pc <= r <= 0 ? c : pc + 'd12;
     end
 
-    assign mem_rd_en   = ~state[5];
-    assign mem_rd_addr = state[0] ? pc :
-                         state[1] ? pc + 'd4 :
-                         state[2] ? pc + 'd8 :
-                         state[3] ? a :
-                         state[4] ? b :
-                         'b0;
-    assign mem_wr_en   = state[5];
-    assign mem_wr_addr = pc;
-    assign mem_wr_data = r;
+    assign mem_we   = cpu_en ? ~state[5] : 'bz;
+    assign mem_data = cpu_en && mem_we ? r : 'bz;
+    assign mem_addr = cpu_en ?
+                      state[0] ? pc :
+                      state[1] ? pc + 'd4 :
+                      state[2] ? pc + 'd8 :
+                      state[3] ? a :
+                      state[4] ? b :
+                      state[5] ? pc :
+                      'b0 : 'bz;
 
 endmodule
