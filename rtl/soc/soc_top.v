@@ -2,12 +2,12 @@ module soc_top (
     input clk,
     input rst,
 
-    output                          debug_we,
-    output  [ADDR_WID-1:0]          debug_addr,
-    output  [DATA_WID-1:0]          debug_data
+    output                  debug_we,
+    output  [ADDR_WID-1:0]  debug_addr,
+    output  [DATA_WID-1:0]  debug_data
 );
     
-    localparam CORE_CNT = 256;
+    localparam CORE_CNT = 1024;
     localparam ADDR_WID = 32;
     localparam DATA_WID = 32;
 

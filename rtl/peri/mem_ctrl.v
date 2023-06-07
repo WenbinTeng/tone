@@ -30,13 +30,13 @@ module mem_ctrl #(
         for (i = 0; i < CORE_CNT; i = i + 1) begin
             assign clk_en[i] = clk & (token == i);
             assign cpu_en[i] = token == i;
-            assign mem_data = mem_we && (token == i) ? douta : 'bz;
         end
     endgenerate
+    
+    assign mem_data = mem_we ? douta : 'bz;
 
     blk_mem_gen_0 u_blk_mem_gen_0 (
         .clka(clk),     // input wire clka
-        .rsta(rst),    // input wire rsta
         .ena(1),        // input wire ena
         .wea(wea),      // input wire [3 : 0] wea
         .addra(addra),  // input wire [31 : 0] addra
