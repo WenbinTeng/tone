@@ -6,7 +6,7 @@ module gpio (
     input   [31:0]  mem_addr,
     inout   [31:0]  mem_data,
 
-    inout   [ 7:0]  pins
+    inout   [ 7:0]  gpio_pins
 );
 
     localparam GPIO_MASK = 32'hffff0000;
@@ -32,7 +32,7 @@ module gpio (
             else begin
                 for (i = 0; i < 8; i = i + 1)
                     if (gpio_ctrl[i])
-                        gpio_data[i] <= pins[i];
+                        gpio_data[i] <= gpio_pins[i];
             end
         end
     end
@@ -40,7 +40,7 @@ module gpio (
     genvar k;
     generate
         for (k = 0; k < 8; k = k + 1) begin
-            assign pins[k] = gpio_ctrl[k] ? 1'bz : gpio_data[k];
+            assign gpio_pins[k] = gpio_ctrl[k] ? 1'bz : gpio_data[k];
         end
     endgenerate
 
