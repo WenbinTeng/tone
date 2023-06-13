@@ -243,7 +243,7 @@ module uart(
     end
 
     assign uart_tx  = tx_reg;
-    assign mem_data = ~mem_we ?
+    assign mem_data = !mem_we ?
                       mem_addr == (UART_RXDT|UART_MASK) ? uart_rx_data :
                       mem_addr == (UART_CTRL|UART_MASK) ? uart_ctrl :
                       mem_addr == (UART_STAT|UART_MASK) ? uart_stat :
