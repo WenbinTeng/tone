@@ -1,0 +1,40 @@
+set_pin_assignment { clk }              { LOCATION = K14; }     ##24MHZ
+set_pin_assignment { rst_n }            { LOCATION = K16; }		##USER_KEY
+
+set_pin_assignment { gpio_pins[0] }     { LOCATION = A3;  }
+set_pin_assignment { gpio_pins[1] }     { LOCATION = C5;  }
+set_pin_assignment { gpio_pins[2] }     { LOCATION = B6;  }
+set_pin_assignment { gpio_pins[3] }     { LOCATION = C9;  }
+set_pin_assignment { gpio_pins[4] }     { LOCATION = B10; }
+set_pin_assignment { gpio_pins[5] }     { LOCATION = B14; }
+set_pin_assignment { gpio_pins[6] }     { LOCATION = A14; }
+set_pin_assignment { gpio_pins[7] }     { LOCATION = B15; }
+
+set_pin_assignment { spi_miso }         { LOCATION = B16; }
+set_pin_assignment { spi_mosi }         { LOCATION = C16; }
+set_pin_assignment { spi_ss   }         { LOCATION = C15; }
+set_pin_assignment { spi_sclk }         { LOCATION = E16; }
+
+set_pin_assignment { uart_rx }          { LOCATION = H13; }
+set_pin_assignment { uart_tx }          { LOCATION = J13; }
+
+set_pin_assignment { debug_we }         { LOCATION = R7;  }
+set_pin_assignment { debug_we }         { LOCATION = T7;  }
+
+set_pin_assignment { debug_addr[0] }    { LOCATION = N3;  }
+set_pin_assignment { debug_addr[1] }    { LOCATION = P2;  }
+set_pin_assignment { debug_addr[2] }    { LOCATION = M4;  }
+set_pin_assignment { debug_addr[3] }    { LOCATION = R2;  }
+set_pin_assignment { debug_addr[4] }    { LOCATION = P4;  }
+set_pin_assignment { debug_addr[5] }    { LOCATION = N5;  }
+set_pin_assignment { debug_addr[6] }    { LOCATION = N4;  }
+set_pin_assignment { debug_addr[7] }    { LOCATION = P5;  }
+
+set_pin_assignment { debug_data[0] }    { LOCATION = M10; }
+set_pin_assignment { debug_data[1] }    { LOCATION = P11; }
+set_pin_assignment { debug_data[2] }    { LOCATION = L10; }
+set_pin_assignment { debug_data[3] }    { LOCATION = N11; }
+set_pin_assignment { debug_data[4] }    { LOCATION = P12; }
+set_pin_assignment { debug_data[5] }    { LOCATION = N12; }
+set_pin_assignment { debug_data[6] }    { LOCATION = R16; }
+set_pin_assignment { debug_data[7] }    { LOCATION = M12; }
