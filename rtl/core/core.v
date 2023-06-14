@@ -14,30 +14,30 @@ module core (
     reg  [31:0] c;
     wire [31:0] r = a - b;
 
-    always @(posedge clk or posedge rst) begin
-        if      (rst)       state <= 'b1;
+    always @(posedge clk or negedge rst) begin
+        if      (~rst)      state <= 'b1;
         else                state <= {state[4:0], state[5]};
     end
 
-    always @(posedge clk or posedge rst) begin
-        if      (rst)       a <= 'b0;
+    always @(posedge clk or negedge rst) begin
+        if      (~rst)      a <= 'b0;
         else if (state[0])  a <= mem_data;
         else if (state[3])  a <= mem_data;
     end
 
-    always @(posedge clk or posedge rst) begin
-        if      (rst)       b <= 'b0;
+    always @(posedge clk or negedge rst) begin
+        if      (~rst)      b <= 'b0;
         else if (state[1])  b <= mem_data;
         else if (state[4])  b <= mem_data;
     end
 
-    always @(posedge clk or posedge rst) begin
-        if      (rst)       c <= 'b0;
+    always @(posedge clk or negedge rst) begin
+        if      (~rst)      c <= 'b0;
         else if (state[2])  c <= mem_data;
     end
 
-    always @(posedge clk or posedge rst) begin
-        if      (rst)       pc <= 'b0;
+    always @(posedge clk or negedge rst) begin
+        if      (~rst)      pc <= 'b0;
         else if (state[5])  pc <= r <= 0 ? c : pc + 'd12;
     end
 
