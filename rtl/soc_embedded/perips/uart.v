@@ -15,7 +15,7 @@ module uart(
     localparam UART_TXDT = 32'h4;
     localparam UART_CTRL = 32'h8;
     localparam UART_STAT = 32'hc;
-    localparam UART_BAUD = 32'h1b8;
+    localparam UART_BAUD = 32'hd0;
 
     // uart receive data
     // [7:0]: data received
@@ -50,7 +50,6 @@ module uart(
 
     always @(posedge clk or negedge rst) begin
         if (~rst) begin
-            uart_rx_data <= 'b0;
             uart_tx_data <= 'b0;
             uart_ctrl    <= 'b0;
             uart_stat    <= 'b0;
