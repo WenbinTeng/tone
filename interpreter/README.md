@@ -35,6 +35,6 @@ The figure below shows how it works.
 
 ## TODO LIST
 
-- Long address jump: lui, auipc, jal, jalr.
+- Long address jump: jalr.
 - Fine-grained memory access: byte and half.
 - Privileged instructions.
