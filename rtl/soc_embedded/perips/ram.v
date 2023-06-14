@@ -18,6 +18,6 @@ module ram (
         end
     end
 
-    assign mem_data = !mem_we ? ram_array[mem_addr] : 'bz;
+    assign mem_data = !mem_we && (mem_addr >= 'd0) && (mem_addr <= 'd1023) ? ram_array[mem_addr] : 'bz;
     
 endmodule
