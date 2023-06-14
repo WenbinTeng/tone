@@ -12,7 +12,7 @@ def transform(l:list) -> list:
         0x0013: "addi", 0x0113: "slti", 0x0193: "sltiu", 0x0213: "xori", 0x0313: "ori", 0x0393: "andi", 0x0093: "slli", 0x0293: "srli", 0x8293: "srai",
         0x0063: "beq", 0x00e3: "bne", 0x0263: "blt", 0x02e3: "bge", 0x0363: "bltu", 0x03e3: "bgeu",
         0x0123: "sw", 0x0103: "lw",
-        0x0037: "lui"
+        0x0037: "lui", 0x0017: "auipc"
     }
     start_dict = {
         0x0033: ADD_START, 0x8033: SUB_START, 0x0133: SLT_START, 0x01b3: SLTU_START, 0x00b3: SLL_START, 0x02b3: SRL_START, 0x82b3: SRA_START, 0x0233: XOR_START, 0x0333: OR_START, 0x03b3: AND_START,
@@ -79,36 +79,36 @@ def transform(l:list) -> list:
         if code_dict[decoder.id] in {"add", "sub", "slt", "sltu", "sll", "srl", "sra", "xor", "or", "and", "addi", "slti", "sltiu", "xori", "ori", "andi", "slli", "srli", "srai", "lw", "sw"}:
             inst_list = inst_list + [
                 subleq(RZ, RZ, pc + 2 * INST_WIDTH),
-                [pc + 5 * INST_WIDTH, 0, 0],                            # mark the address after calling micro-procedure manually.
-                subleq(RZ, pc + 1 * INST_WIDTH, pc + 3 * INST_WIDTH),   # store the address negative value temporary.
-                subleq(end_dict[decoder.id], RZ, pc + 4 * INST_WIDTH),  # overwrite the return address to the exit of the micro-procedure.
-                subleq(RZ, RZ, start_dict[decoder.id])                  # calling micro-procedure.
+                [pc + 5 * INST_WIDTH, 0, 0],                                            # mark the address after calling micro-procedure manually.
+                subleq(RZ, pc + 1 * INST_WIDTH, pc + 3 * INST_WIDTH),                   # store the address negative value temporary.
+                subleq(end_dict[decoder.id], RZ, pc + 4 * INST_WIDTH),                  # overwrite the return address to the exit of the micro-procedure.
+                subleq(RZ, RZ, start_dict[decoder.id])                                  # calling micro-procedure.
             ]
             pc = pc + 5 * INST_WIDTH
-        elif code_dict[decoder.id] in {"beq", "blt", "bltu"}:   # take judgement natively.
+        elif code_dict[decoder.id] in {"beq", "blt", "bltu"}:                           # take judgement natively.
             if decoder.b_imm < 0x80000000:
-                wait_dict[len(addr_list) + decoder.b_imm] = pc + INST_WIDTH # if jump after, join the wait list, and overwrite target address later.
+                wait_dict[len(addr_list) + decoder.b_imm] = pc + INST_WIDTH             # if jump after, join the wait list, and overwrite target address later.
             inst_list = inst_list + [
                 subleq(RZ, RZ, pc + 2 * INST_WIDTH),
-                [pc + 7 * INST_WIDTH, addr_list[-(~decoder.b_imm&0xffffffff)+1] if decoder.b_imm >= 0x80000000 else 0, 0], # if jump before, store the target address.
-                subleq(RZ, pc + 1 * INST_WIDTH, pc + 3 * INST_WIDTH),               # store the address negative value temporary.
-                subleq(end_dict[decoder.id], RZ, pc + 4 * INST_WIDTH),              # overwrite the return address (if branch NOT taken) to the exit of the micro-procedure.
+                [pc + 7 * INST_WIDTH, addr_list[-(~decoder.b_imm&0xffffffff)+1], 0],    # if jump before, store the target address.
+                subleq(RZ, pc + 1 * INST_WIDTH, pc + 3 * INST_WIDTH),                   # store the address negative value temporary.
+                subleq(end_dict[decoder.id], RZ, pc + 4 * INST_WIDTH),                  # overwrite the return address (if branch NOT taken) to the exit of the micro-procedure.
                 subleq(RZ, RZ, pc + 5 * INST_WIDTH),
-                subleq(RZ, pc + 1 * INST_WIDTH + WORD_WIDTH, pc + 6 * INST_WIDTH),  # store the address negative value temporary.
-                subleq(end_dict[decoder.id] - INST_WIDTH, RZ, pc + 7 * INST_WIDTH)  # overwrite the return address (if branch taken) to the exit of the micro-procedure.
+                subleq(RZ, pc + 1 * INST_WIDTH + WORD_WIDTH, pc + 6 * INST_WIDTH),      # store the address negative value temporary.
+                subleq(end_dict[decoder.id] - INST_WIDTH, RZ, pc + 7 * INST_WIDTH)      # overwrite the return address (if branch taken) to the exit of the micro-procedure.
             ]
             pc = pc + 7 * INST_WIDTH
-        elif code_dict[decoder.id] in {"bne", "bge", "bgeu"}:   # take judgement opposite to beq/blt/bltu.
+        elif code_dict[decoder.id] in {"bne", "bge", "bgeu"}:                           # take judgement opposite to beq/blt/bltu.
             if decoder.b_imm < 0x80000000:
-                wait_dict[len(addr_list) + decoder.b_imm] = pc + INST_WIDTH # if jump after, join the wait list, and overwrite target address later.
+                wait_dict[len(addr_list) + decoder.b_imm] = pc + INST_WIDTH             # if jump after, join the wait list, and overwrite target address later.
             inst_list = inst_list + [
                 subleq(RZ, RZ, pc + 2 * INST_WIDTH),
-                [pc + 7 * INST_WIDTH, addr_list[-(~decoder.b_imm&0xffffffff)+1] if decoder.b_imm >= 0x80000000 else 0, 0], # if jump before, store the target address.
-                subleq(RZ, pc + 1 * INST_WIDTH, pc + 3 * INST_WIDTH),               # store the address negative value temporary.
-                subleq(end_dict[decoder.id] - INST_WIDTH, RZ, pc + 4 * INST_WIDTH), # overwrite the return address (if branch NOT taken) to the exit of the micro-procedure.
+                [pc + 7 * INST_WIDTH, addr_list[-(~decoder.b_imm&0xffffffff)+1], 0],    # if jump before, store the target address.
+                subleq(RZ, pc + 1 * INST_WIDTH, pc + 3 * INST_WIDTH),                   # store the address negative value temporary.
+                subleq(end_dict[decoder.id] - INST_WIDTH, RZ, pc + 4 * INST_WIDTH),     # overwrite the return address (if branch NOT taken) to the exit of the micro-procedure.
                 subleq(RZ, RZ, pc + 5 * INST_WIDTH),
-                subleq(RZ, pc + 1 * INST_WIDTH + WORD_WIDTH, pc + 6 * INST_WIDTH),  # store the address negative value temporary.
-                subleq(end_dict[decoder.id], RZ, pc + 7 * INST_WIDTH)               # overwrite the return address (if branch taken) to the exit of the micro-procedure.
+                subleq(RZ, pc + 1 * INST_WIDTH + WORD_WIDTH, pc + 6 * INST_WIDTH),      # store the address negative value temporary.
+                subleq(end_dict[decoder.id], RZ, pc + 7 * INST_WIDTH)                   # overwrite the return address (if branch taken) to the exit of the micro-procedure.
             ]
             pc = pc + 7 * INST_WIDTH
         
@@ -121,7 +121,7 @@ def transform(l:list) -> list:
             ]
             pc = pc + 3 * INST_WIDTH
         
-        # The instruction LUI need not to call micro-procedure
+        # This instruction need not to call micro-procedure
         if code_dict[decoder.id] == "lui":
             inst_list = inst_list + [
                 subleq(RZ, RZ, pc + 2 * INST_WIDTH),
@@ -130,6 +130,17 @@ def transform(l:list) -> list:
                 subleq(GPR_MASK + decoder.rd, RZ, pc + 4 * INST_WIDTH)
             ]
             pc = pc + 4 * INST_WIDTH
+        elif code_dict[decoder.id] == "auipc":
+            if decoder.u_imm < 0x80000000:
+                wait_dict[len(addr_list) + decoder.u_imm] = pc + INST_WIDTH
+            inst_list = inst_list + [
+                subleq(RZ, RZ, pc + 2 * INST_WIDTH),
+                [0, addr_list[-(~decoder.u_imm&0xffffffff)+1], 0],
+                subleq(RZ, pc + 1 * INST_WIDTH + WORD_WIDTH, pc + 3 * INST_WIDTH),
+                subleq(pc + 4 * INST_WIDTH + 2 * WORD_WIDTH, RZ, pc + 4 * INST_WIDTH),
+                subleq(RZ, RZ, 0)
+            ]
+            pc = pc + 5 * INST_WIDTH
         
         # Record instruction address
         addr_list.append(pc)
