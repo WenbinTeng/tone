@@ -18,14 +18,14 @@ module rom (
     localparam PRC_START = 32'hffffe000;
     localparam PRC_END   = 32'hffffffff;
 
-    reg [31:0] csr_array [4095:0];
+    reg [31:0] csr_array [31:0]; // reg [31:0] csr_array [4095:0];
 
     always @(posedge clk or negedge rst) begin
         if (~rst) begin
 
         end
         else if (mem_we && (mem_addr >= CSR_START) && (mem_addr <= CSR_END)) begin
-            csr_array[mem_addr[13:2]] <= mem_data;
+            csr_array[mem_addr[6:2]] <= mem_data;
         end
     end
 
@@ -51,11 +51,15 @@ module rom (
         end
     end
 
-    reg [31:0] const_value [255:0];
+    wire [31:0] const_value [63:0];
 
-    initial begin
-        
-    end
+    genvar i;
+    generate
+        for (i = 0; i < 32; i = i + 1) begin
+            assign const_value[i] = 32'h1 << i;
+            assign const_value[32+i] = (32'h1 << i) - 1;
+        end
+    endgenerate
 
     reg [31:0] procedures [8191:0];
 
@@ -69,7 +73,7 @@ module rom (
     end
 
     initial begin
-        
+        // $readmemh("init.txt", procedures);
     end
 
     assign mem_data = !mem_we ?
