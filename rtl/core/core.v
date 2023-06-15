@@ -21,28 +21,28 @@ module core (
 
     always @(posedge clk or negedge rst) begin
         if      (~rst)      a <= 'b0;
-        else if (state[0])  a <= mem_data;
-        else if (state[3])  a <= mem_data;
+        else if (state[0])  a <= trans_endian(mem_data);
+        else if (state[3])  a <= trans_endian(mem_data);
     end
 
     always @(posedge clk or negedge rst) begin
         if      (~rst)      b <= 'b0;
-        else if (state[1])  b <= mem_data;
-        else if (state[4])  b <= mem_data;
+        else if (state[1])  b <= trans_endian(mem_data);
+        else if (state[4])  b <= trans_endian(mem_data);
     end
 
     always @(posedge clk or negedge rst) begin
         if      (~rst)      c <= 'b0;
-        else if (state[2])  c <= mem_data;
+        else if (state[2])  c <= trans_endian(mem_data);
     end
 
     always @(posedge clk or negedge rst) begin
         if      (~rst)      pc <= 'b0;
-        else if (state[5])  pc <= r <= 0 ? c : pc + 'd12;
+        else if (state[5])  pc <= (r <= 0) ? c : pc + 'd12;
     end
 
     assign mem_we   = cpu_en ? ~state[5] : 'bz;
-    assign mem_data = cpu_en && mem_we ? r : 'bz;
+    assign mem_data = cpu_en && mem_we ? trans_endian(r) : 'bz;
     assign mem_addr = cpu_en ?
                       state[0] ? pc :
                       state[1] ? pc + 'd4 :
@@ -51,5 +51,9 @@ module core (
                       state[4] ? b :
                       state[5] ? pc :
                       'b0 : 'bz;
+
+    function [31:0] trans_endian(input [31:0] x);
+        trans_endian = {x[7:0], x[15:8], x[23:16], x[31:24]};
+    endfunction
 
 endmodule
