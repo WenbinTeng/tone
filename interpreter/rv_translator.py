@@ -109,7 +109,7 @@ def _sub():
         subleq(RZ, RZ, _start)
     ]
 
-def _and(rd, rs1, rs2, line):
+def _and():
     """ and rd,rs1,rs2
 
     Initial state:
@@ -190,7 +190,7 @@ def _and(rd, rs1, rs2, line):
         subleq(RZ, RZ, _start)
     ]
 
-def _or(rd, rs1, rs2, line):
+def _or():
     """ or rd,rs1,rs2
 
     Initial state:
@@ -274,7 +274,7 @@ def _or(rd, rs1, rs2, line):
         subleq(RZ, RZ, _start)
     ]
 
-def _xor(rd, rs1, rs2, line):
+def _xor():
     """ xor rd,rs1,rs2
 
     Initial state:
@@ -359,7 +359,7 @@ def _xor(rd, rs1, rs2, line):
     ]
 
 
-def _slt(rd, rs1, rs2, line):
+def _slt():
     """ slt rd,rs1,rs2
 
     Initial state:
@@ -388,7 +388,7 @@ def _slt(rd, rs1, rs2, line):
         subleq(RZ, RZ, _start)
     ]
         
-def _sltu(rd, rs1, rs2, line):
+def _sltu():
     """ sltu rd,rs1,rs2
 
     Initial state:
@@ -450,7 +450,7 @@ def _sltu(rd, rs1, rs2, line):
         subleq(RZ, RZ, _start)
     ]
 
-def _sll(rd, rs1, rs2, line):
+def _sll():
     """ sll rd,rs1,rs2
 
     Initial state:
@@ -858,8 +858,16 @@ def _sw():
         subleq(RZ, RZ, _start)
     ]
 
-
+def generate_bitfile():
+    micro_prc = [] + _add() + _sub() + _and() + _or() + _xor() + _slt() + _sltu() + _sll() + _srl() + _sra() + _beq() + _blt() + _bltu() + _lw() + _sw()
+    with open("init.txt", "wb") as f:
+        for inst in micro_prc:
+            for word in inst:
+                f.write(word.to_bytes(4,byteorder="little"))
 
 class rv_translator:
     def __init__(self):
         pass
+    
+if __name__ == "__main__":
+    generate_bitfile()
