@@ -38,3 +38,7 @@ set_pin_assignment { debug_data[4] }    { LOCATION = P12; }
 set_pin_assignment { debug_data[5] }    { LOCATION = N12; }
 set_pin_assignment { debug_data[6] }    { LOCATION = R16; }
 set_pin_assignment { debug_data[7] }    { LOCATION = M12; }
+
+set_pin_assignment { led_r }            { LOCATION = R3;  }
+set_pin_assignment { led_g }            { LOCATION = J14; }
+set_pin_assignment { led_b }            { LOCATION = P13; }
