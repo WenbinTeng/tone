@@ -41,7 +41,7 @@ module core (
         else if (state[5])  pc <= (r <= 0) ? c : pc + 'd12;
     end
 
-    assign mem_we   = cpu_en ? ~state[5] : 'bz;
+    assign mem_we   = cpu_en ? state[5] : 'bz;
     assign mem_data = cpu_en && mem_we ? trans_endian(r) : 'bz;
     assign mem_addr = cpu_en ?
                       state[0] ? pc :
