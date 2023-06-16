@@ -14,10 +14,10 @@ module ram (
 
         end
         else if (mem_we && (mem_addr >= 'd0) && (mem_addr <= 'd1023)) begin
-            ram_array[mem_addr] <= mem_data;
+            ram_array[mem_addr[11:2]] <= mem_data;
         end
     end
 
-    assign mem_data = !mem_we && (mem_addr >= 'd0) && (mem_addr <= 'd1023) ? ram_array[mem_addr] : 'bz;
+    assign mem_data = !mem_we && (mem_addr >= 'd0) && (mem_addr <= 'd1023) ? ram_array[mem_addr[11:2]] : 'bz;
     
 endmodule
