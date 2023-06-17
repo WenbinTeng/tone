@@ -70,6 +70,6 @@ module rom (
                       (mem_addr >= TMP_START) && (mem_addr <= TMP_END) ? temp_variable[mem_addr[6:2]-'b10000] :
                       (mem_addr >= CON_START) && (mem_addr <= CON_END) ? const_value[mem_addr[7:2]] :
                       (mem_addr >= PRC_START) && (mem_addr <= PRC_END) ? procedures[mem_addr[12:2]] :
-                      'b0 : 'bz;
+                      'bz : 'bz;
 
 endmodule

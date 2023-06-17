@@ -246,6 +246,6 @@ module uart(
                       mem_addr == (UART_RXDT|UART_MASK) ? uart_rx_data :
                       mem_addr == (UART_CTRL|UART_MASK) ? uart_ctrl :
                       mem_addr == (UART_STAT|UART_MASK) ? uart_stat :
-                      'b0 : 'bz;
+                      'bz : 'bz;
 
 endmodule

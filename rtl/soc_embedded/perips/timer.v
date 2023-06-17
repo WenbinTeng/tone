@@ -54,6 +54,6 @@ module timer (
                       mem_addr == (TIMER_DATA|TIMER_MASK) ? timer_data :
                       mem_addr == (TIMER_TINT|TIMER_MASK) ? timer_tint :
                       mem_addr == (TIMER_CTRL|TIMER_MASK) ? timer_ctrl :
-                      'b0 : 'bz;
+                      'bz : 'bz;
 
 endmodule

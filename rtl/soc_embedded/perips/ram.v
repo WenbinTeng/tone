@@ -15,6 +15,6 @@ module ram (
         end
     end
 
-    assign mem_data = rst && !mem_we && (mem_addr >= 'd0) && (mem_addr <= 'd1023) ? ram_array[mem_addr[11:2]] : 'bz;
+    assign mem_data = rst && !mem_we && (mem_addr[11:2] >= 'd0) && (mem_addr[11:2] <= 'd1023) ? ram_array[mem_addr[11:2]] : 'bz;
     
 endmodule

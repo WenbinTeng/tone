@@ -153,6 +153,6 @@ module spi (
                       mem_addr == (SPI_DATA|SPI_MASK) ? spi_data :
                       mem_addr == (SPI_CTRL|SPI_MASK) ? spi_ctrl :
                       mem_addr == (SPI_STAT|SPI_MASK) ? spi_stat :
-                      'b0 : 'bz;
+                      'bz : 'bz;
 
 endmodule
