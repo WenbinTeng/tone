@@ -17,7 +17,7 @@ module gpio (
     reg [31:0] gpio_ctrl;
 
     integer i;
-    always @(posedge clk or negedge rst) begin
+    always @(posedge clk) begin
         if (~rst) begin
             gpio_data <= 'h0;
             gpio_ctrl <= 'h0;

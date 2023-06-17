@@ -9,11 +9,8 @@ module ram (
 
     reg [31:0] ram_array [1023:0];
 
-    always @(posedge clk or negedge rst) begin
-        if (~rst) begin
-
-        end
-        else if (mem_we && (mem_addr >= 'd0) && (mem_addr <= 'd1023)) begin
+    always @(posedge clk) begin
+        if (mem_we && (mem_addr >= 'd0) && (mem_addr <= 'd1023)) begin
             ram_array[mem_addr[11:2]] <= mem_data;
         end
     end

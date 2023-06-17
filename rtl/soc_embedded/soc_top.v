@@ -1,6 +1,6 @@
 module soc_top (
     input           clk,
-    input           rst_n,
+    input           rst,
 
     inout   [ 7:0]  gpio_pins,
 
@@ -16,8 +16,6 @@ module soc_top (
     output  [31:0]  debug_addr,
     output  [31:0]  debug_data
 );
-    
-    wire rst = ~rst_n; // wait to remove jitter.
 
     wire            mem_we;
     wire    [31:0]  mem_addr;

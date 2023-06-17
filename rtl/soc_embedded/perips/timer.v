@@ -24,7 +24,7 @@ module timer (
     // [2]: timer interupt pending
     reg [31:0] timer_ctrl;
 
-    always @(posedge clk or negedge rst) begin
+    always @(posedge clk) begin
         if (~rst) begin
             timer_data <= 'b0;
         end
@@ -33,7 +33,7 @@ module timer (
         end
     end
 
-    always @(posedge clk or negedge rst) begin
+    always @(posedge clk) begin
         if (~rst) begin
             timer_tint <= 'b0;
             timer_ctrl <= 'b0;

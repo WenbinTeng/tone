@@ -38,7 +38,7 @@ module spi (
     reg [31:0]  _ext_clk_cnt;
     wire[31:0]  _ext_clk_div;
 
-    always @(posedge clk or negedge rst) begin
+    always @(posedge clk) begin
         if (~rst) begin
             spi_data <= 'b0;
             spi_ctrl <= 'b0;
@@ -58,25 +58,25 @@ module spi (
         end
     end
 
-    always @(posedge clk or negedge rst) begin
+    always @(posedge clk) begin
         if      (~rst)                              _spi_en <= 0;
         else if ( spi_ctrl[0] == 1'b1)              _spi_en <= 1;
         else if (_spi_done    == 1'b1)              _spi_en <= 0;
     end
 
-    always @(posedge clk or negedge rst) begin
+    always @(posedge clk) begin
         if      (~rst)                              _spi_done <= 0;
         else if (_spi_en && _spi_clk_cnt == 'd17)   _spi_done <= 1;
         else                                        _spi_done <= 0;
     end
 
-    always @(posedge clk or negedge rst) begin
+    always @(posedge clk) begin
         if      (~rst)                              _ext_clk_cnt <= 'b0;
         else if (_spi_en)                           _ext_clk_cnt <= (_ext_clk_cnt == _ext_clk_div) ? 'b0 : _ext_clk_cnt + 'b1;
         else                                        _ext_clk_cnt <= 'b0;
     end
 
-    always @(posedge clk or negedge rst) begin
+    always @(posedge clk) begin
         if (~rst) begin
             _spi_clk_cnt <= 'b0;
             _spi_clk_edg <= 'b0;
@@ -107,7 +107,7 @@ module spi (
     reg         sclk_reg;
     reg [3:0]   bits_ptr;
 
-    always @(posedge clk or negedge rst) begin
+    always @(posedge clk) begin
         if (~rst) begin
             mosi_reg <= 0;
             sclk_reg <= 0;

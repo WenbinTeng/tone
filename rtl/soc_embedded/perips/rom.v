@@ -18,35 +18,26 @@ module rom (
     localparam PRC_START = 32'hffffe000;
     localparam PRC_END   = 32'hffffffff;
 
-    reg [31:0] csr_array [31:0]; // reg [31:0] csr_array [4095:0];
+    reg [31:0] csr_array [8191:0];
 
-    always @(posedge clk or negedge rst) begin
-        if (~rst) begin
-
-        end
-        else if (mem_we && (mem_addr >= CSR_START) && (mem_addr <= CSR_END)) begin
-            csr_array[mem_addr[6:2]] <= mem_data;
+    always @(posedge clk) begin
+        if (mem_we && (mem_addr >= CSR_START) && (mem_addr <= CSR_END)) begin
+            csr_array[mem_addr[13:2]] <= mem_data;
         end
     end
 
     reg [31:0] gpr_array [31:0];
 
-    always @(posedge clk or negedge rst) begin
-        if (~rst) begin
-
-        end
-        else if (mem_we && (mem_addr >= GPR_START) && (mem_addr <= GPR_END) && (mem_addr[6:2] != 'b0)) begin
+    always @(posedge clk) begin
+        if (mem_we && (mem_addr >= GPR_START) && (mem_addr <= GPR_END) && (mem_addr[6:2] != 'b0)) begin
             gpr_array[mem_addr[6:2]] <= mem_data;
         end
     end
 
     reg [31:0] temp_variable [31:0];
 
-    always @(posedge clk or negedge rst) begin
-        if (~rst) begin
-
-        end
-        else if (mem_we && (mem_addr >= TMP_START) && (mem_addr <= TMP_END)) begin
+    always @(posedge clk) begin
+        if (mem_we && (mem_addr >= TMP_START) && (mem_addr <= TMP_END)) begin
             temp_variable[mem_addr[6:2]-'b10000] <= mem_data;
         end
     end
@@ -63,11 +54,8 @@ module rom (
 
     reg [31:0] procedures [8191:0];
 
-    always @(posedge clk or negedge rst) begin
-        if (~rst) begin
-
-        end
-        else if (mem_we && (mem_addr >= PRC_START) && (mem_addr <= PRC_END)) begin
+    always @(posedge clk) begin
+        if (mem_we && (mem_addr >= PRC_START) && (mem_addr <= PRC_END)) begin
             procedures[mem_addr[12:2]] <= mem_data;
         end
     end
@@ -78,7 +66,7 @@ module rom (
 
     assign mem_data = !mem_we ?
                       (mem_addr >= CSR_START) && (mem_addr <= CSR_END) ? csr_array[mem_addr[13:2]] :
-                      (mem_addr >= GPR_START) && (mem_addr <= GPR_END) ? gpr_array[mem_addr[ 6:2]] :
+                      (mem_addr >= GPR_START) && (mem_addr <= GPR_END) ? gpr_array[mem_addr[6:2]] :
                       (mem_addr >= TMP_START) && (mem_addr <= TMP_END) ? temp_variable[mem_addr[6:2]-'b10000] :
                       (mem_addr >= CON_START) && (mem_addr <= CON_END) ? const_value[mem_addr[7:2]] :
                       (mem_addr >= PRC_START) && (mem_addr <= PRC_END) ? procedures[mem_addr[12:2]] :

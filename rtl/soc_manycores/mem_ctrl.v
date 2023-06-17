@@ -15,7 +15,7 @@ module mem_ctrl #(
 
     reg [31:0] token;
 
-    always @(posedge clk or negedge rst) begin
+    always @(posedge clk) begin
         if      (~rst)  token = 'b0;
         else            token = token == CORE_CNT - 1 ? 'b0 : token + 'b1;
     end

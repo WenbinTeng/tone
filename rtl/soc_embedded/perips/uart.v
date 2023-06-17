@@ -48,7 +48,7 @@ module uart(
     wire[31:0]  _tx_ext_div = UART_BAUD;
     reg [31:0]  _tx_bit_cnt;
 
-    always @(posedge clk or negedge rst) begin
+    always @(posedge clk) begin
         if (~rst) begin
             uart_tx_data <= 'b0;
             uart_ctrl    <= 'b0;
@@ -72,7 +72,7 @@ module uart(
         end
     end
 
-    always @(posedge clk or negedge rst) begin
+    always @(posedge clk) begin
         if (~rst) begin
             _rx_q0 <= 0;
             _rx_q1 <= 0;
@@ -83,7 +83,7 @@ module uart(
         end
     end
 
-    always @(posedge clk or negedge rst) begin
+    always @(posedge clk) begin
         if (~rst) begin
             _rx_start <= 0;
         end
@@ -100,7 +100,7 @@ module uart(
         end
     end
 
-    always @(posedge clk or negedge rst) begin
+    always @(posedge clk) begin
         if (~rst) begin
             _rx_end <= 0;
         end
@@ -114,7 +114,7 @@ module uart(
         end
     end
 
-    always @(posedge clk or negedge rst) begin
+    always @(posedge clk) begin
         if (~rst) begin
             _rx_ext_cnt <= 'b0;
         end
@@ -126,7 +126,7 @@ module uart(
         end
     end
 
-    always @(posedge clk or negedge rst) begin
+    always @(posedge clk) begin
         if (~rst) begin
             _rx_clk_cnt <= 'b0;
             _rx_clk_edg <= 'b0;
@@ -153,7 +153,7 @@ module uart(
         end
     end
 
-    always @(posedge clk or negedge rst) begin
+    always @(posedge clk) begin
         if (~rst) begin
             uart_rx_data <= 'b0;
         end
@@ -169,7 +169,7 @@ module uart(
         end
     end
 
-    always @(posedge clk or negedge rst) begin
+    always @(posedge clk) begin
         if (~rst) begin
             _tx_start <= 0;
         end
@@ -181,7 +181,7 @@ module uart(
         end
     end
 
-    always @(posedge clk or negedge rst) begin
+    always @(posedge clk) begin
         if (~rst) begin
             _tx_end <= 0;
         end
@@ -193,7 +193,7 @@ module uart(
         end
     end
 
-    always @(posedge clk or negedge rst) begin
+    always @(posedge clk) begin
         if (~rst) begin
             _tx_ext_cnt <= 'b0;
         end
@@ -205,7 +205,7 @@ module uart(
         end
     end
 
-    always @(posedge clk or negedge rst) begin
+    always @(posedge clk) begin
         if (~rst) begin
             _tx_bit_cnt <= 'b0;
         end
@@ -219,7 +219,7 @@ module uart(
 
     reg tx_reg;
 
-    always @(posedge clk or negedge rst) begin
+    always @(posedge clk) begin
         if (~rst) begin
             tx_reg <= 1;
         end
