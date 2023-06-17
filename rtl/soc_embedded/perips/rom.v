@@ -64,7 +64,7 @@ module rom (
         // $readmemh("init.txt", procedures);
     end
 
-    assign mem_data = !mem_we ?
+    assign mem_data = rst && !mem_we ?
                       (mem_addr >= CSR_START) && (mem_addr <= CSR_END) ? csr_array[mem_addr[13:2]] :
                       (mem_addr >= GPR_START) && (mem_addr <= GPR_END) ? gpr_array[mem_addr[6:2]] :
                       (mem_addr >= TMP_START) && (mem_addr <= TMP_END) ? temp_variable[mem_addr[6:2]-'b10000] :

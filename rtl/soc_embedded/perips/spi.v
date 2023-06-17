@@ -149,7 +149,7 @@ module spi (
     assign spi_mosi = mosi_reg;
     assign spi_sclk = sclk_reg;
     assign spi_ss   = spi_ctrl[0];
-    assign mem_data = !mem_we?
+    assign mem_data = rst && !mem_we?
                       mem_addr == (SPI_DATA|SPI_MASK) ? spi_data :
                       mem_addr == (SPI_CTRL|SPI_MASK) ? spi_ctrl :
                       mem_addr == (SPI_STAT|SPI_MASK) ? spi_stat :

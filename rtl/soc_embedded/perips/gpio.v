@@ -44,7 +44,7 @@ module gpio (
         end
     endgenerate
 
-    assign mem_data = !mem_we ?
+    assign mem_data = rst && !mem_we ?
                       mem_addr == (GPIO_DATA|GPIO_MASK) ? gpio_data :
                       mem_addr == (GPIO_CTRL|GPIO_CTRL) ? gpio_ctrl :
                       'b0 : 'bz;
