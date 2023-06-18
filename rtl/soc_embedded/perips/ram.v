@@ -10,11 +10,11 @@ module ram (
     reg [31:0] ram_array [1023:0];
 
     always @(posedge clk) begin
-        if (mem_we && (mem_addr >= 'd0) && (mem_addr <= 'd1023)) begin
+        if (mem_we && (mem_addr[31:2] >= 'd0) && (mem_addr[31:2] <= 'd1023)) begin
             ram_array[mem_addr[11:2]] <= mem_data;
         end
     end
 
-    assign mem_data = rst && !mem_we && (mem_addr[11:2] >= 'd0) && (mem_addr[11:2] <= 'd1023) ? ram_array[mem_addr[11:2]] : 'bz;
+    assign mem_data = rst && !mem_we && (mem_addr[31:2] >= 'd0) && (mem_addr[31:2] <= 'd1023) ? ram_array[mem_addr[11:2]] : 'bz;
     
 endmodule
