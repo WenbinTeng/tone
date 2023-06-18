@@ -52,6 +52,18 @@ module rom (
         end
     endgenerate
 
+    reg [31:0] rz;
+
+    initial begin
+        rz = 'b0;
+    end
+
+    always @(posedge clk) begin
+        if (mem_we && (mem_addr == 32'hffffc200)) begin
+            rz <= mem_data;
+        end
+    end
+
     reg [31:0] procedures [8191:0];
 
     always @(posedge clk) begin
@@ -70,6 +82,7 @@ module rom (
                       (mem_addr >= TMP_START) && (mem_addr <= TMP_END) ? temp_variable[mem_addr[6:2]-'b10000] :
                       (mem_addr >= CON_START) && (mem_addr <= CON_END) ? const_value[mem_addr[7:2]] :
                       (mem_addr >= PRC_START) && (mem_addr <= PRC_END) ? procedures[mem_addr[12:2]] :
+                      mem_addr == 32'hffffc200 ? rz :
                       'bz : 'bz;
 
 endmodule
