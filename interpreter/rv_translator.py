@@ -20,40 +20,40 @@ CONST_ONE = [int(0xffffc180) + x * WORD_WIDTH for x in range(0,32)]
 RZ  = int(0xffffc200)
 
 ADD_START   = int(0x00000000)
-ADD_END     = int(0x00000054)
+ADD_END     = int(0x0000005c)
 SUB_START   = int(0x00000060)
-SUB_END     = int(0x000000b4)
+SUB_END     = int(0x000000bc)
 AND_START   = int(0x000000c0)
-AND_END     = int(0x00000234)
+AND_END     = int(0x0000023c)
 OR_START    = int(0x00000240)
-OR_END      = int(0x000003b4)
+OR_END      = int(0x000003bc)
 XOR_START   = int(0x000003c0)
-XOR_END     = int(0x00000534)
+XOR_END     = int(0x0000053c)
 SLT_START   = int(0x00000540)
-SLT_END     = int(0x00000594)
+SLT_END     = int(0x0000059c)
 SLTU_START  = int(0x000005a0)
-SLTU_END    = int(0x000006b4)
+SLTU_END    = int(0x000006bc)
 SLL_START   = int(0x000006c0)
-SLL_END     = int(0x00000774)
+SLL_END     = int(0x0000077c)
 SRL_START   = int(0x00000780)
-SRL_END     = int(0x000009b4)
+SRL_END     = int(0x000009bc)
 SRA_START   = int(0x000009c0)
-SRA_END     = int(0x00000bf4)
+SRA_END     = int(0x00000bfc)
 BEQ_START   = int(0x00000c00)
-BEQ_END     = int(0x00000c54)
+BEQ_END     = int(0x00000c5c)
 BLT_START   = int(0x00000c60)
-BLT_END     = int(0x00000cb4)
+BLT_END     = int(0x00000cbc)
 BLTU_START  = int(0x00000cc0)
-BLTU_END    = int(0x00000dd4)
+BLTU_END    = int(0x00000ddc)
 LW_START    = int(0x00000de0)
-LW_END      = int(0x00000e94)
+LW_END      = int(0x00000e9c)
 SW_START    = int(0x00000ea0)
-SW_END      = int(0x00000f54)
-    
+SW_END      = int(0x00000fbc)
+
 def subleq(a, b, c):
     return [a, b, c]
 
-def _add():
+def _add() -> list:
     """ add rd,rs1,rs2
         
     Initial state:
@@ -81,7 +81,7 @@ def _add():
         subleq(RZ, RZ, _start)
     ]
 
-def _sub():
+def _sub() -> list:
     """ sub rd,rs1,rs2
 
     Initial state:
@@ -109,7 +109,7 @@ def _sub():
         subleq(RZ, RZ, _start)
     ]
 
-def _and():
+def _and() -> list:
     """ and rd,rs1,rs2
 
     Initial state:
@@ -182,15 +182,14 @@ def _and():
         subleq(T2, T5, _start + 28 * INST_WIDTH),
     # L1:
         # mask = mask >> 1
-        subleq(_start + 3 * INST_WIDTH + WORD_WIDTH, CONST_POW[2],  _start + 28 * INST_WIDTH),
-        subleq(_start + 7 * INST_WIDTH + WORD_WIDTH, CONST_POW[2],  _start + 29 * INST_WIDTH),
+        subleq(_start + 3 * INST_WIDTH + WORD_WIDTH, CONST_POW[2],  _start + 29 * INST_WIDTH),
+        subleq(_start + 7 * INST_WIDTH + WORD_WIDTH, CONST_POW[2],  _start + 30 * INST_WIDTH),
         subleq(RZ, RZ, _start + 9 * INST_WIDTH),
-        subleq(RZ, RZ, _start + 31 * INST_WIDTH),
     # EXIT:
         subleq(RZ, RZ, _start)
     ]
 
-def _or():
+def _or() -> list:
     """ or rd,rs1,rs2
 
     Initial state:
@@ -274,7 +273,7 @@ def _or():
         subleq(RZ, RZ, _start)
     ]
 
-def _xor():
+def _xor() -> list:
     """ xor rd,rs1,rs2
 
     Initial state:
@@ -359,7 +358,7 @@ def _xor():
     ]
 
 
-def _slt():
+def _slt() -> list:
     """ slt rd,rs1,rs2
 
     Initial state:
@@ -388,7 +387,7 @@ def _slt():
         subleq(RZ, RZ, _start)
     ]
         
-def _sltu():
+def _sltu() -> list:
     """ sltu rd,rs1,rs2
 
     Initial state:
@@ -450,7 +449,7 @@ def _sltu():
         subleq(RZ, RZ, _start)
     ]
 
-def _sll():
+def _sll() -> list:
     """ sll rd,rs1,rs2
 
     Initial state:
@@ -498,7 +497,7 @@ def _sll():
         subleq(RZ, RZ, _start)
     ]
     
-def _srl():
+def _srl() -> list:
     """ srl rd,rs1,rs2
 
     Initial state:
@@ -592,7 +591,7 @@ def _srl():
         subleq(RZ, RZ, _start)
     ]
     
-def _sra():
+def _sra() -> list:
     """ sra rd,rs1,rs2
 
     Initial state:
@@ -689,7 +688,7 @@ def _sra():
         subleq(RZ, RZ, _start)
     ]
 
-def _beq():
+def _beq() -> list:
     """ beq rs1,rs2,offset
 
     Initial state:
@@ -713,7 +712,7 @@ def _beq():
         subleq(RZ, RZ, _start)
     ]
 
-def _blt():
+def _blt() -> list:
     """ blt rs1,rs2,offset
 
     Initial state:
@@ -737,7 +736,7 @@ def _blt():
         subleq(RZ, RZ, _start)
     ]
     
-def _bltu():
+def _bltu() -> list:
     """ bltu rs1,rs2,offset
 
     Initial state:
@@ -791,7 +790,7 @@ def _bltu():
         subleq(RZ, RZ, _start)
     ]
 
-def _lw():
+def _lw() -> list:
     """ lw rd,offset(rs1)
 
     Initial state:
@@ -809,14 +808,14 @@ def _lw():
         subleq(T0, T0, _start + 1 * INST_WIDTH),
         subleq(RZ, RZ, _start + 2 * INST_WIDTH),
         subleq(RZ, T1, _start + 3 * INST_WIDTH),
-        subleq(_start + 9 * INST_WIDTH + WORD_WIDTH, RZ, _start + 4 * INST_WIDTH),
+        subleq(_start + 8 * INST_WIDTH + WORD_WIDTH, RZ, _start + 4 * INST_WIDTH),
         subleq(RZ, RZ, _start + 5 * INST_WIDTH),
         subleq(RZ, T2, _start + 6 * INST_WIDTH),
-        subleq(_start + 9 * INST_WIDTH + WORD_WIDTH, RZ, _start + 7 * INST_WIDTH),
+        subleq(_start + 8 * INST_WIDTH + WORD_WIDTH, RZ, _start + 7 * INST_WIDTH),
         subleq(RZ, RZ, _start + 8 * INST_WIDTH),
         subleq(RZ, 0,  _start + 9 * INST_WIDTH),
-        subleq(T0, RZ, _start + 15 * INST_WIDTH),
-        subleq(RZ, RZ, _start + 15 * INST_WIDTH),
+        subleq(T0, RZ, _start + 10 * INST_WIDTH),
+        subleq(_start + 8 * INST_WIDTH + WORD_WIDTH, _start + 8 * INST_WIDTH + WORD_WIDTH, _start + 15 * INST_WIDTH),
         subleq(RZ, RZ, _start + 15 * INST_WIDTH),
         subleq(RZ, RZ, _start + 15 * INST_WIDTH),
         subleq(RZ, RZ, _start + 15 * INST_WIDTH),
@@ -824,7 +823,7 @@ def _lw():
         subleq(RZ, RZ, _start)
     ]
 
-def _sw():
+def _sw() -> list:
     """ sw rs2,offset(rs1)
 
     Initial state:
@@ -843,31 +842,29 @@ def _sw():
         subleq(T0, T0, _start + 1 * INST_WIDTH),
         subleq(RZ, RZ, _start + 2 * INST_WIDTH),
         subleq(RZ, T1, _start + 3 * INST_WIDTH),
-        subleq(_start + 9 * INST_WIDTH, RZ, _start + 4 * INST_WIDTH),
-        subleq(RZ, RZ, _start + 5 * INST_WIDTH),
-        subleq(RZ, T3, _start + 6 * INST_WIDTH),
-        subleq(_start + 9 * INST_WIDTH, RZ, _start + 7 * INST_WIDTH),
-        subleq(RZ, RZ, _start + 8 * INST_WIDTH),
-        subleq(RZ, T2, _start + 9 * INST_WIDTH),
+        subleq(_start + 13 * INST_WIDTH, RZ, _start + 4 * INST_WIDTH),
+        subleq(_start + 13 * INST_WIDTH + WORD_WIDTH, RZ, _start + 5 * INST_WIDTH),
+        subleq(_start + 14 * INST_WIDTH, RZ, _start + 6 * INST_WIDTH),
+        subleq(RZ, RZ, _start + 7 * INST_WIDTH),
+        subleq(RZ, T3, _start + 8 * INST_WIDTH),
+        subleq(_start + 13 * INST_WIDTH, RZ, _start + 9 * INST_WIDTH),
+        subleq(_start + 13 * INST_WIDTH + WORD_WIDTH, RZ, _start + 10 * INST_WIDTH),
+        subleq(_start + 14 * INST_WIDTH, RZ, _start + 11 * INST_WIDTH),
+        subleq(RZ, RZ, _start + 12 * INST_WIDTH),
+        subleq(RZ, T2, _start + 13 * INST_WIDTH),
+        subleq(0,  0,  _start + 14 * INST_WIDTH),
         subleq(0,  RZ, _start + 15 * INST_WIDTH),
-        subleq(RZ, RZ, _start + 15 * INST_WIDTH),
-        subleq(RZ, RZ, _start + 15 * INST_WIDTH),
-        subleq(RZ, RZ, _start + 15 * INST_WIDTH),
-        subleq(RZ, RZ, _start + 15 * INST_WIDTH),
-        subleq(RZ, RZ, _start + 15 * INST_WIDTH),
+        subleq(_start + 13 * INST_WIDTH, _start + 13 * INST_WIDTH, _start + 16 * INST_WIDTH),
+        subleq(_start + 13 * INST_WIDTH + WORD_WIDTH, _start + 13 * INST_WIDTH + WORD_WIDTH, _start + 17 * INST_WIDTH),
+        subleq(_start + 14 * INST_WIDTH, _start + 14 * INST_WIDTH, _start + 18 * INST_WIDTH),
+        subleq(RZ, RZ, _start + 23 * INST_WIDTH),
+        subleq(RZ, RZ, _start + 23 * INST_WIDTH),
+        subleq(RZ, RZ, _start + 23 * INST_WIDTH),
+        subleq(RZ, RZ, _start + 23 * INST_WIDTH),
+        subleq(RZ, RZ, _start + 23 * INST_WIDTH),
         subleq(RZ, RZ, _start)
     ]
-
-def generate_bitfile():
-    micro_prc = [] + _add() + _sub() + _and() + _or() + _xor() + _slt() + _sltu() + _sll() + _srl() + _sra() + _beq() + _blt() + _bltu() + _lw() + _sw()
-    with open("init.txt", "wb") as f:
-        for inst in micro_prc:
-            for word in inst:
-                f.write(word.to_bytes(4,byteorder="little"))
 
 class rv_translator:
     def __init__(self):
         pass
-    
-if __name__ == "__main__":
-    generate_bitfile()
