@@ -21,7 +21,7 @@ module soc_top (
     wire    [31:0]  mem_addr;
     wire    [31:0]  mem_data;
 
-    assign debug_we = mem_we;
+    assign debug_we   = mem_we;
     assign debug_addr = mem_addr;
     assign debug_data = mem_data;
 
