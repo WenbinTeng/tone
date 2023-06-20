@@ -105,7 +105,7 @@ def transform(l:list) -> list:
         elif code_dict[decoder.id] in {"beq", "blt", "bltu"}:                                                   # take judgement natively.
             inst_list = inst_list + [
                 subleq(RZ, RZ, pc + 2 * INST_WIDTH),
-                [pc + 10 * INST_WIDTH, 0, 0],                                                                    # 1st word stores return address, 2nd word stores branch address.
+                [pc + 10 * INST_WIDTH, 0, 0],                                                                   # 1st word stores return address, 2nd word stores branch address.
                 subleq(RZ, pc + 1 * INST_WIDTH, pc + 3 * INST_WIDTH),                                           # store the address negative value temporary.
                 subleq(end_dict[decoder.id], end_dict[decoder.id], pc + 4 * INST_WIDTH),                        # clear the destination
                 subleq(end_dict[decoder.id], RZ, pc + 5 * INST_WIDTH),                                          # overwrite the return address (if branch NOT taken) to the exit of the micro-procedure.
@@ -123,7 +123,7 @@ def transform(l:list) -> list:
         elif code_dict[decoder.id] in {"bne", "bge", "bgeu"}:                                                   # take judgement opposite to beq/blt/bltu.
             inst_list = inst_list + [
                 subleq(RZ, RZ, pc + 2 * INST_WIDTH),
-                [pc + 10 * INST_WIDTH, 0, 0],                                                                    # 1st word stores return address, 2nd word stores branch address.
+                [pc + 10 * INST_WIDTH, 0, 0],                                                                   # 1st word stores return address, 2nd word stores branch address.
                 subleq(RZ, pc + 1 * INST_WIDTH, pc + 3 * INST_WIDTH),                                           # store the address negative value temporary.
                 subleq(end_dict[decoder.id]-INST_WIDTH, end_dict[decoder.id]-INST_WIDTH, pc + 4 * INST_WIDTH),  # clear the destination
                 subleq(end_dict[decoder.id]-INST_WIDTH, RZ, pc + 5 * INST_WIDTH),                               # overwrite the return address (if branch NOT taken) to the exit of the micro-procedure.
