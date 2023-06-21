@@ -2,8 +2,6 @@
 
 This interpreter aims to provide a tool to run RISC-V programs on this OISC based system through **binary translation**.
 
-
-
 ## Introduction
 
 This interpreter can translate part of RV32I bare-metal binary programs into executable files composed of `subleq` instruction sequence.
@@ -24,8 +22,6 @@ We use the MMIO to allocate a memory space for RISCV execution registers, variab
 2. Overwrite the exit address of micro procedure.
 3. Jump to the entrance of micro procedure.
 4. Get return value.
-
-
 
 The figure below shows how it works.
 
