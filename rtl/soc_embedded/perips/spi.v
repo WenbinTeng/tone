@@ -36,7 +36,7 @@ module spi (
     reg [31:0]  _spi_clk_cnt;
     reg         _spi_clk_edg;
     reg [31:0]  _ext_clk_cnt;
-    wire[31:0]  _ext_clk_div;
+    wire[31:0]  _ext_clk_div = 32'd16;
 
     always @(posedge clk) begin
         if (~rst) begin
@@ -79,7 +79,7 @@ module spi (
     always @(posedge clk) begin
         if (~rst) begin
             _spi_clk_cnt <= 'b0;
-            _spi_clk_edg <= 'b0;
+            _spi_clk_edg <= 0;
         end
         else if (_spi_en) begin
             if (_ext_clk_cnt == _ext_clk_div) begin
@@ -112,8 +112,8 @@ module spi (
             mosi_reg <= 0;
             sclk_reg <= 0;
         end
-        else if (_spi_en) begin
-            case (_spi_clk_cnt[0])
+        else if (_spi_en && _spi_clk_edg) begin
+            case (_spi_clk_cnt)
                 1,3,5,7,9,11,13,15: begin
                     sclk_reg <= ~sclk_reg;
                     if (spi_ctrl[2]) begin
