@@ -12,18 +12,12 @@ module soc_top (
     input           uart_rx,
     output          uart_tx,
 
-    output          debug_we,
-    output  [31:0]  debug_addr,
-    output  [31:0]  debug_data
+    output          timer_int
 );
 
     wire            mem_we;
     wire    [31:0]  mem_addr;
     wire    [31:0]  mem_data;
-
-    assign debug_we   = mem_we;
-    assign debug_addr = mem_addr;
-    assign debug_data = mem_data;
 
     core u_core (
         .clk        (clk),
@@ -70,7 +64,8 @@ module soc_top (
         .rst        (rst),
         .mem_we     (mem_we),
         .mem_addr   (mem_addr),
-        .mem_data   (mem_data)
+        .mem_data   (mem_data),
+        .timer_int  (timer_int)
     );
 
     ram u_ram (

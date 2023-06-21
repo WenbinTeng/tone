@@ -90,7 +90,7 @@ module rom (
     end
 
     initial begin
-        $readmemh("C:/Users/User/Documents/Repository/tone/demo/micro-procedure.txt", procedures);
+        $readmemh("micro-procedure.txt", procedures);
     end
 
     assign mem_data = rst && !mem_we ?

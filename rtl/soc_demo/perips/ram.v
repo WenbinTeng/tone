@@ -10,7 +10,7 @@ module ram (
     reg [31:0] ram_array [1023:0];
 
     initial begin
-        $readmemh("C:/Users/User/Documents/Repository/tone/demo/fpga.txt", ram_array);
+        $readmemh("fpga.txt", ram_array);
     end
 
     always @(posedge clk) begin

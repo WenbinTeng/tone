@@ -18,15 +18,23 @@ module rom (
     localparam PRC_START = 32'hffffe000;
     localparam PRC_END   = 32'hffffffff;
 
-    reg [31:0] csr_array [8191:0];
+    integer i;
 
-    always @(posedge clk) begin
-        if (mem_we && (mem_addr >= CSR_START) && (mem_addr <= CSR_END)) begin
-            csr_array[mem_addr[13:2]] <= mem_data;
+    // (* ram_style="distributed" *) reg [31:0] csr_array [4095:0];
+
+    // always @(posedge clk) begin
+    //     if (mem_we && (mem_addr >= CSR_START) && (mem_addr <= CSR_END)) begin
+    //         csr_array[mem_addr[13:2]] <= mem_data;
+    //     end
+    // end
+
+    (* ram_style="distributed" *) reg [31:0] gpr_array [31:0];
+
+    initial begin
+        for (i = 0; i < 32; i = i + 1) begin
+            gpr_array[i] <= 'b0;
         end
     end
-
-    reg [31:0] gpr_array [31:0];
 
     always @(posedge clk) begin
         if (mem_we && (mem_addr >= GPR_START) && (mem_addr <= GPR_END) && (mem_addr[6:2] != 'b0)) begin
@@ -34,7 +42,13 @@ module rom (
         end
     end
 
-    reg [31:0] temp_variable [31:0];
+    (* ram_style="distributed" *) reg [31:0] temp_variable [31:0];
+
+    initial begin
+        for (i = 0; i < 32; i = i + 1) begin
+            temp_variable[i] <= 'b0;
+        end
+    end
 
     always @(posedge clk) begin
         if (mem_we && (mem_addr >= TMP_START) && (mem_addr <= TMP_END)) begin
@@ -44,11 +58,11 @@ module rom (
 
     wire [31:0] const_value [63:0];
 
-    genvar i;
+    genvar k;
     generate
-        for (i = 0; i < 32; i = i + 1) begin
-            assign const_value[i] = 32'h1 << i;
-            assign const_value[32+i] = (32'h1 << i) - 1;
+        for (k = 0; k < 32; k = k + 1) begin
+            assign const_value[k] = 32'h1 << k;
+            assign const_value[32+k] = (32'h1 << k) - 1;
         end
     endgenerate
 
@@ -64,11 +78,11 @@ module rom (
         end
     end
 
-    reg [31:0] procedures [8191:0];
+    (* ram_style="distributed" *) reg [31:0] procedures [1023:0];
 
     always @(posedge clk) begin
         if (mem_we && (mem_addr >= PRC_START) && (mem_addr <= PRC_END)) begin
-            procedures[mem_addr[12:2]] <= mem_data;
+            procedures[mem_addr[11:2]] <= mem_data;
         end
     end
 
@@ -77,11 +91,11 @@ module rom (
     end
 
     assign mem_data = rst && !mem_we ?
-                      (mem_addr >= CSR_START) && (mem_addr <= CSR_END) ? csr_array[mem_addr[13:2]] :
+                    //  (mem_addr >= CSR_START) && (mem_addr <= CSR_END) ? csr_array[mem_addr[13:2]] :
                       (mem_addr >= GPR_START) && (mem_addr <= GPR_END) ? gpr_array[mem_addr[6:2]] :
                       (mem_addr >= TMP_START) && (mem_addr <= TMP_END) ? temp_variable[mem_addr[6:2]-'b10000] :
                       (mem_addr >= CON_START) && (mem_addr <= CON_END) ? const_value[mem_addr[7:2]] :
-                      (mem_addr >= PRC_START) && (mem_addr <= PRC_END) ? procedures[mem_addr[12:2]] :
+                      (mem_addr >= PRC_START) && (mem_addr <= PRC_END) ? procedures[mem_addr[11:2]] :
                       mem_addr == 32'hffffc200 ? rz :
                       'bz : 'bz;
 

@@ -7,7 +7,7 @@ module ram (
     inout   [31:0]  mem_data
 );
 
-    reg [31:0] ram_array [1023:0];
+    (* ram_style="distributed" *) reg [31:0] ram_array [1023:0];
 
     always @(posedge clk) begin
         if (mem_we && (mem_addr[31:2] >= 'd0) && (mem_addr[31:2] <= 'd1023)) begin
