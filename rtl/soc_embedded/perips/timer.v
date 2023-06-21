@@ -50,10 +50,11 @@ module timer (
         end
     end
 
-    assign mem_data = rst && !mem_we ?
-                      mem_addr == (TIMER_DATA|TIMER_MASK) ? timer_data :
-                      mem_addr == (TIMER_TINT|TIMER_MASK) ? timer_tint :
-                      mem_addr == (TIMER_CTRL|TIMER_MASK) ? timer_ctrl :
-                      'bz : 'bz;
+    assign timer_int = timer_data == timer_tint;
+    assign mem_data  = rst && !mem_we ?
+                       mem_addr == (TIMER_DATA|TIMER_MASK) ? timer_data :
+                       mem_addr == (TIMER_TINT|TIMER_MASK) ? timer_tint :
+                       mem_addr == (TIMER_CTRL|TIMER_MASK) ? timer_ctrl :
+                       'bz : 'bz;
 
 endmodule
