@@ -79,13 +79,13 @@ Here we will discuss some of the top issues about this OISC system.
 
 Obviously, OISC can build up a complete computing system using significantly fewer hardware resources since the extremely simple instruction decode unit and instruction execute unit. According to our experiments, the CPU core of TONE use 13.6% less resources in average than our RV32I-based single-cycle CPU implementation "tv", as shown below.
 
-<img src="./asset/exp_1.png" alt="exp_1" style="zoom: 33%;" />
+<img src="./asset/exp_1.png" alt="exp_1" style="width: 67%;" />
 
 ### 2. Bloating in Code Volume
 
 However, the reduced instruction set cannot bring reduced user program, in other words, a simple calculation requires extremely lots of operations using single instruction. According to our experiments, the user program use 10298% larger memory space than RV32I-based user program, as shown below.
 
-<img src="./asset/exp_2.png" alt="exp_2" style="zoom: 33%;" />
+<img src="./asset/exp_2.png" alt="exp_2" style="width: 67%;" />
 
 ### 3. Performance Factors
 
